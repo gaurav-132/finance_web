@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { faCloud, faDashboard, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faCloud, faDashboard, faHome , faNoteSticky,faCalendarWeek, faPersonCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // Define icon mappings
@@ -8,6 +8,9 @@ const iconMapping = {
     faHome: faHome,
     faCloud: faCloud,
     faDashboard: faDashboard,
+    faNoteSticky:faNoteSticky,
+    faCalendarWeek:faCalendarWeek,
+    faPersonCircleQuestion:faPersonCircleQuestion
 };
 
 const Sidebar = () => {
@@ -21,6 +24,10 @@ const Sidebar = () => {
         {name: "Dashboard" , icon:'faHome', path: '/admin/dashboard'},
         {name: "Employees" , icon:'faCloud', path: '/admin/employees'},
         {name: "Customers" , icon:'faDashboard', path: '/admin/customers'},
+        {name: "Loans" , icon:'faNoteSticky' , path:`/admin/loans`},
+        {name: "Today's Data" , icon:'faCalendarWeek' , path:`/admin/todays`},
+        {name: "Loan Requests" , icon:'faPersonCircleQuestion' , path:`/admin/requests`},
+        {name: "Salary" , icon:'faCloud' , path:`/admin/salary`},
     ];
 
     return (
