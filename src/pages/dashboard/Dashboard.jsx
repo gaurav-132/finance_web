@@ -11,6 +11,50 @@ const Dashboard = () => {
                 <h2 className='text-white font-bold'>Dashboard</h2>
             </div>
             <div></div>
+            <div className='bg-[#373737] rounded-md px-2 py-4'>
+                <h2 className='text-white font-bold'>Dashboard</h2>
+            </div>
+            <div></div>
+            <div className='bg-[#373737] rounded-md px-2 py-4'>
+                <h2 className='text-white font-bold'>Dashboard</h2>
+            </div>
+            <div></div>
+            <div className='bg-[#373737] rounded-md px-2 py-4'>
+                <h2 className='text-white font-bold'>Dashboard</h2>
+            </div>
+            <div></div>
+            <div className='bg-[#373737] rounded-md px-2 py-4'>
+                <h2 className='text-white font-bold'>Dashboard</h2>
+            </div>
+            <div></div>
+            <div className='bg-[#373737] rounded-md px-2 py-4'>
+                <h2 className='text-white font-bold'>Dashboard</h2>
+            </div>
+            <div></div>
+            <div className='bg-[#373737] rounded-md px-2 py-4'>
+                <h2 className='text-white font-bold'>Dashboard</h2>
+            </div>
+            <div></div>
+            <div className='bg-[#373737] rounded-md px-2 py-4'>
+                <h2 className='text-white font-bold'>Dashboard</h2>
+            </div>
+            <div></div>
+            <div className='bg-[#373737] rounded-md px-2 py-4'>
+                <h2 className='text-white font-bold'>Dashboard</h2>
+            </div>
+            <div></div>
+            <div className='bg-[#373737] rounded-md px-2 py-4'>
+                <h2 className='text-white font-bold'>Dashboard</h2>
+            </div>
+            <div></div>
+            <div className='bg-[#373737] rounded-md px-2 py-4'>
+                <h2 className='text-white font-bold'>Dashboard</h2>
+            </div>
+            <div></div>
+            <div className='bg-[#373737] rounded-md px-2 py-4'>
+                <h2 className='text-white font-bold'>Dashboard</h2>
+            </div>
+            <div></div>
         </div>
     )
 }
