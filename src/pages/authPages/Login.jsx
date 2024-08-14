@@ -3,7 +3,6 @@ import InputBox from '../../components/InputBox';
 import Button from '../../components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as yup from 'yup';
 import { loginUser } from '../../app/slices/authSlice';
 import loginSchema from '../../schemas/loginSchema';
 import { useNavigate } from 'react-router-dom';

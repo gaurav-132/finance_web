@@ -8,27 +8,27 @@ body{
   font-family: sans-serif;
 }
 
-/* Hide the scrollbar arrows in WebKit-based browsers */
+
 ::-webkit-scrollbar {
-    width: 12px; /* Width of the scrollbar */
+    width: 12px; 
 }
   
 ::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Background color of the track */
+    background: #f1f1f1;
 }
   
 ::-webkit-scrollbar-thumb {
-    background: #888; /* Color of the scrollbar thumb */
-    border-radius: 10px; /* Border radius for the scrollbar thumb */
+    background: #888; 
+    border-radius: 10px; 
 }
   
 ::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Color of the scrollbar thumb on hover */
+    background: #555;
 }
   
 
 body::-webkit-scrollbar {
-    display: none; /* Hide the scrollbar */
+    display: none; 
 }
   
   

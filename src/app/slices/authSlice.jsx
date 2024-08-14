@@ -11,7 +11,6 @@ export const loginUser = createAsyncThunk(
             console.log(response.data);
             return {
                 isAuthenticated: true,
-                user: response.data.user,
                 token: response.data.token
             };
         } catch (error) {
@@ -62,8 +61,6 @@ const authSlice = createSlice({
                 state.status = 'succeeded';
                 state.token = action.payload.token;
                 state.isAuthenticated = true;
-
-                localStorage.setItem("token", action.payload.token);
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.status = 'failed';

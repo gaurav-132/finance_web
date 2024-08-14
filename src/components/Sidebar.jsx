@@ -31,7 +31,7 @@ const Sidebar = () => {
     ];
 
     return (
-        <div className="bg-white shadow-sm fixed inset-y-0 z-50 my-4  w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-blue-gray-100">
+        <div className="bg-white shadow-sm fixed inset-y-0 z-50 my-4 overflow-y-scroll  w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-blue-gray-100">
             <div className="flex flex-col px-6 py-8">
                 <div className='text-center mb-4'>
                     <h3 className='font-bold text-xl'>Chaudhary Finance</h3>
