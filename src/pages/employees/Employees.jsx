@@ -1,15 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllEmployees } from '../../app/slices/employeeSlice';
+import { fetchAllEmployees, updateEmployee } from '../../app/slices/employeeSlice';
 import Button from '../../components/Button';
 import EmployeeDetailModal from '../../components/EmployeeDetailModal';
-
-
+import AlertModal from '../../components/AlertModal';
+import SelectBox from '../../components/SelectBox';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import InputBox from '../../components/InputBox';
 
 const Employees = () => {
-
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [openAlertModal, setOpenAlertModal] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+    const { employees, total, limit, page, status, error, updateResponse } = useSelector((state) => state.employees);
+    const filterData = {
+        total:0,
+        limit:10,
+        page:1,
+        allocatedLocationId:0,
+        employeeName:'',
+    };
+
 
     const [initialValues, setInitialValues] = useState({
         empId: '',
@@ -21,106 +34,179 @@ const Employees = () => {
         allocatedLocationId: 1,
     });
 
-    const employees = useSelector((state) => state.employees.employees);
-
-    const [filteredEmployees , setFilteredEmployees] = useState([])
 
     useEffect(() => {
-        dispatch(fetchAllEmployees());
-    },[]);
+        dispatch(fetchAllEmployees(filterData));
+    }, [dispatch]);
 
+    useEffect(() => {
+        if (updateResponse) {
+            setAlertMessage(updateResponse);
+            setOpenAlertModal(true);
+        }
+    }, [updateResponse]);
 
-    const fetchWorkersByLocation = (location) =>{
-        const filtered = employees.filter((employee)=>employee.location === location)
-        setFilteredEmployees(filtered)
-    }
-    const fetchWorkersByName = (name) =>{
-        const filtered = employees.filter((employee)=>employee.name === name)
-        setFilteredEmployees(filtered)
-    }
     
+
     const changeModalStatus = (employee) => {
         setInitialValues({
             empId: employee.id,
             name: employee.name,
-            markSheet: '', 
-            check: '', 
-            photo: '', 
+            markSheet: '',
+            check: '',
+            photo: '',
             aadhaarNo: employee.aadhaarNo || '',
             panNo: employee.panNo || '',
-            allocatedLocationId: employee.locationId || 1,
+            allocatedLocationId: employee.allocatedLocationId,
         });
-        console.log(initialValues)
 
         setIsModalOpen(true);
+    };
+
+    const handlePageChange = (newPage) => {
+        
+        filterData.page = newPage;
+        dispatch(fetchAllEmployees(filterData));
+    };
+
+    const handleSubmitDetails =  (formData) => {
+        dispatch(updateEmployee(formData));
+    };
+
+    const options = [
+        { value: '1', label: 'Haridwar' },
+        { value: '2', label: 'Roorkee' },
+    ];
+
+    const handleSubmit = () => {
+        dispatch(fetchAllEmployees(filterData));
     }
 
-    const handleSubmitDetails = (values) => {
-        dispatch(updateEmployee(values));
-    }
-    
-
-  
     return (
         <div className="">
-            <div className='bg-[#373737] rounded-md px-2 py-4'>
+            <div className='bg-[#373737] rounded-md px-2 py-3'>
                 <h2 className='text-white font-bold'>Employees</h2>
             </div>
             <div className=''>
-                <div className="flex gap-9 my-8">
-                    <select onChange={(e)=>fetchWorkersByLocation(e.target.value)} name="Location" id="">
-                        <option value="Haridwar">Haridwar</option>
-                        <option value="Roorkee">Roorkee</option>
-                        <option value="Bhagwanpur">Haridwar</option>
-                        <option value="Haridwar">Haridwar</option>
-                    </select>
-                    <select name="Worker" onChange={(e)=>fetchWorkersByName(e.target.value)}  id="">
-                        <option value=""> Select Worker</option>
-                        {/* {workers.map((worker,i)=>{
-                            <option key={i} value={worker}>
-                            {worker}
-                            </option>
-                        })} */}
-                    </select>
-
+                <div className="flex  mt-4">
+                    <Formik
+                        initialValues={filterData}
+                        onSubmit={handleSubmit}
+                    >
+                        {({ isSubmitting }) => (
+                            <Form className=''>
+                                <div className='flex w-full'>
+                                    <div className='mr-10'>
+                                        <Field
+                                            id="employeeName"
+                                            name="employeeName"
+                                            type="text"
+                                            label="Employee Name"
+                                            as={InputBox}
+                                        />
+                                        <ErrorMessage name="aadhaarNo" component="div" className='text-red-500 text-sm' />
+                                    </div>
+                                    <div className='mr-10'>
+                                        <Field
+                                            id="allocatedLocationId"
+                                            name="allocatedLocationId"
+                                            label="Select Location"
+                                            component={SelectBox}
+                                            options={options}
+                                            placeholder="Select an option"
+                                        />
+                                        <ErrorMessage name="locationId" component="div" className='text-red-500 text-sm' />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className='mr-10'>
+                                        <Button
+                                            type='submit'
+                                            disabled={isSubmitting}
+                                            className='bg-blue-600 text-white focus:ring-0 focus:outline-none w-auto py-1 mr-4 font-semibold'
+                                        >
+                                            {isSubmitting ? 'Searching...' : 'Search'}
+                                        </Button>
+                                        <Button
+                                            type='submit'
+                                            disabled={isSubmitting}
+                                            className='bg-red-600 text-white focus:ring-0 focus:outline-none w-auto py-1 mr-4 font-semibold'
+                                        >
+                                            Clear
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
                 </div>
-                <table className='w-full border'>
-                    <thead>
-                        <tr className='border-b'>
-                            <th className="py-2 border text-sm px-5 text-left">Id</th>
-                            <th className="py-2 border text-sm px-5 text-left">Name</th>
-                            <th className="py-2 border text-sm px-5 text-left">Contact No</th>
-                            <th className="py-2 border text-sm px-5 text-left">Location</th>
-                            <th className="py-2 border text-sm px-5 text-left">Total Loans</th>
-                            <th className="py-2 border text-sm px-5 text-left">Total Amount</th>
-                            <th className="py-2 border text-sm px-5 text-right">#</th>
-                        </tr>
-                    </thead>
-                    <tbody className='overflow-y-scroll'>
-                        {
-                            employees.length > 0 && employees.map((employee)=>(
-                                <tr className='border-b' key={employee.id}>
-                                    <td className="py-1 border text-sm px-5">{employee.id}</td>
-                                    <td className="py-1 border text-sm px-5">{employee.name}</td>
-                                    <td className="py-1 border text-sm px-5">{employee.mobile}</td>
-                                    <td className="py-1 border text-sm px-5">{employee.location}</td>
-                                    <td className="py-1 border text-sm px-5">{employee.totalLoan}</td>
-                                    <td className="py-1 border text-sm px-5">{employee.totalAmt}</td>
-                                    <td className="py-1 border text-sm px-5 text-right">
-                                    <Button
-                                        type='submit'
-                                        disabled={false}
-                                        onClick={() => changeModalStatus(employee)}
-                                        className='bg-[#F44336] py-1 text-white focus:ring-0 focus:outline-none w-full font-semibold'
-                                    >
-                                        Edit
-                                    </Button>
-                                    </td>
+                {
+                    status === 'pending' && 
+                    <div className='border px-2 py-2 rounded text-sm font-bold text-white bg-yellow-400'>Loading...</div>
+                }
+                {
+                    status === 'succeeded' && employees.length === 0 && 
+                    <div className='border px-2 py-2 rounded text-sm font-bold text-white bg-red-600'>No Employees Found</div>
+                }
+                {status === 'succeeded' && employees.length > 0 && (
+                    <div>
+                        <div className="pagination flex justify-between my-2 items-center">
+                            <div>
+                                <p className='text-sm'>Total Employees: {total}</p>
+                            </div>
+                            <div className='text-right'>
+                                <Button
+                                    disabled={page === 1}
+                                    className='text-sm bg-red-700 py-1'
+                                    onClick={() => handlePageChange(page - 1)}>
+                                    Previous
+                                </Button>
+                                <span className='text-sm mx-4'>Page {page} of {Math.ceil(total / limit)}</span>
+                                <Button
+                                    className='text-sm bg-red-700 py-1'
+                                    disabled={page * limit >= total}
+                                    onClick={() => handlePageChange(page + 1)}>
+                                    Next
+                                </Button>
+                            </div>
+                        </div>
+                        <table className='w-full border'>
+                            <thead>
+                                <tr className='border-b'>
+                                    <th className="py-2 border text-sm px-5 text-left">Id</th>
+                                    <th className="py-2 border text-sm px-5 text-left">Name</th>
+                                    <th className="py-2 border text-sm px-5 text-left">Contact No</th>
+                                    <th className="py-2 border text-sm px-5 text-left">Location</th>
+                                    <th className="py-2 border text-sm px-5 text-left">Aadhaar No</th>
+                                    <th className="py-2 border text-sm px-5 text-left">Pan No</th>
+                                    <th className="py-2 border text-sm px-5 text-right">#</th>
                                 </tr>
-                            ))
-                        } 
-                    </tbody>
-                </table>
+                            </thead>
+                            <tbody className='overflow-y-scroll'>
+                                {employees.slice(0,10).map((employee, index) => (
+                                    <tr className='border-b' key={index}>
+                                        <td className="py-1 border text-sm px-5">{index+1}</td>
+                                        <td className="py-1 border text-sm px-5">{employee.name}</td>
+                                        <td className="py-1 border text-sm px-5">{employee.mobile}</td>
+                                        <td className="py-1 border text-sm px-5">{employee.allocatedLocationId}</td>
+                                        <td className="py-1 border text-sm px-5">{employee.aadhaarNo}</td>
+                                        <td className="py-1 border text-sm px-5">{employee.panNo}</td>
+                                        <td className="py-1 border text-sm px-5 text-right">
+                                            <Button
+                                                type='submit'
+                                                disabled={false}
+                                                onClick={() => changeModalStatus(employee)}
+                                                className='bg-[#F44336] py-1 text-white focus:ring-0 focus:outline-none w-full font-semibold'
+                                            >
+                                                Edit
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
             <EmployeeDetailModal
                 isOpen={isModalOpen}
@@ -129,8 +215,13 @@ const Employees = () => {
                 initialValues={initialValues}
                 submitDetails={handleSubmitDetails}
             />
+            <AlertModal
+                isOpen={openAlertModal}
+                onChange={setOpenAlertModal}
+                message={alertMessage}
+            />
         </div>
-    )
-}
+    );
+};
 
-export default Employees
+export default Employees;

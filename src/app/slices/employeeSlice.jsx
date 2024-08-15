@@ -1,13 +1,28 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getData } from '../../services/getData';
+import { postData } from '../../services/postData';
 
 
 export const fetchAllEmployees = createAsyncThunk(
     'employees/fetchAllEmployees',
-    async (thunkAPI) => {
+    async (filterData,thunkAPI) => {
         try {
-            const response = await getData('/v1/employees/get-employees');;
-            return response.data.employees;
+            const response = await postData('/v1/employees/get-employees', {page: filterData.page, limit: filterData.limit});
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const updateEmployee = createAsyncThunk(
+    'employees/updateEmployee',
+    async (formData,thunkAPI) => {
+        try {
+            const response = await postData('/v1/employees/update-details', formData);
+            console.log(response);
+
+            return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -17,9 +32,13 @@ export const fetchAllEmployees = createAsyncThunk(
 const employeesSlice = createSlice({
     name: 'employees',
     initialState: {
-        employees: [],
+        employees:[],
         status: 'idle',
         error: null,
+        updateResponse: null,
+        total:0,
+        page:1,
+        limit:10,
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -29,12 +48,27 @@ const employeesSlice = createSlice({
         })
         .addCase(fetchAllEmployees.fulfilled, (state, action) => {
             state.status = 'succeeded';
-            state.employees = action.payload;
+            state.employees = action.payload.employees;
+            state.total = action.payload.count;
+            state.page = action.payload.page;
+            state.limit = action.payload.limit;
         })
         .addCase(fetchAllEmployees.rejected, (state, action) => {
             state.status = 'failed';
             state.error = action.error.message;
+        })
+        .addCase(updateEmployee.pending, (state) => {
+            state.status = 'loading';
+        })
+        .addCase(updateEmployee.fulfilled, (state, action) => {
+            state.status = 'succeeded';
+            state.updateResponse = action.payload.message;
+        })
+        .addCase(updateEmployee.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
         });
+
     },
 });
 

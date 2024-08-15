@@ -15,7 +15,7 @@ const AdminLayout = () => {
                     <Sidebar />
                 </div>
                 <div className='flex-1 w-[70%] flex flex-col overflow-hidden '>
-                    <div className="bg-white overflow-auto px-6 py-8 shadow-sm fixed inset-y-0 z-50 my-4 w-[900px] rounded-xl transition-transform duration-300 xl:translate-x-0 border border-blue-gray-100">
+                    <div className="bg-white overflow-auto px-6 py-4 shadow-sm fixed inset-y-0 z-50 my-4 w-[900px] rounded-xl transition-transform duration-300 xl:translate-x-0 border border-blue-gray-100">
                         <Outlet />  
                     </div>  
                 </div>

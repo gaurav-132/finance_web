@@ -1,5 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { IoMdClose } from 'react-icons/io';
+import clsx from 'clsx';
 
 const Modal = ({
     isOpen,
@@ -8,7 +9,10 @@ const Modal = ({
     description,
     children,
     modalWidth,
-    minHeigth
+    minHeigth,
+    topMd,
+    top,
+    height
 }) => {
   return (
     <Dialog.Root
@@ -27,12 +31,11 @@ const Modal = ({
                 '
             >
                 <Dialog.Content
-                    style={{ width: `${modalWidth}`, minHeight: `${minHeigth}` }}
+                    style={{ width: `${modalWidth}`, minHeight: `${minHeigth}`, top: `${top}`, height: `${height}`}}
                     className='
                     fixed
                     drop-shadow-sm
                     border
-                    md:top-[40%]
                     left-[50%]
                     h-[35%]
                     w-[80%]
@@ -42,13 +45,16 @@ const Modal = ({
                     rounded-md
                     bg-white
                     focus:outline-none
-                    top-[50%]
                     z-[9999]  // Increase z-index for the content
                 '
                 >
-                    <Dialog.Title className='text-lg px-4 py-2 text-left font-bold'>
+                    <Dialog.Title className={clsx(
+                    'text-lg px-4 text-left font-bold',
+                    title ? 'py-2' : 'py-4' // Apply 'py-2' if title is provided, otherwise 'py-4'
+                )}>
                         {title}
                     </Dialog.Title>
+
                     <hr/>
                     <Dialog.Description className='mb-5 text-sm leading-normal text-center'>
                         {description}
