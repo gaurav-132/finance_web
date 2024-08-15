@@ -15,13 +15,13 @@ const Employees = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const { employees, total, limit, page, status, error, updateResponse } = useSelector((state) => state.employees);
-    const filterData = {
+    const [filterData, setFilterData] = useState({
         total:0,
         limit:10,
         page:1,
         allocatedLocationId:0,
         employeeName:'',
-    };
+    });
 
 
     const [initialValues, setInitialValues] = useState({
@@ -64,7 +64,6 @@ const Employees = () => {
     };
 
     const handlePageChange = (newPage) => {
-        
         filterData.page = newPage;
         dispatch(fetchAllEmployees(filterData));
     };
@@ -78,8 +77,9 @@ const Employees = () => {
         { value: '2', label: 'Roorkee' },
     ];
 
-    const handleSubmit = () => {
-        dispatch(fetchAllEmployees(filterData));
+    const handleSubmit = (values) => {
+        console.log(values)
+        dispatch(fetchAllEmployees(values));
     }
 
     return (
@@ -115,7 +115,7 @@ const Employees = () => {
                                             options={options}
                                             placeholder="Select an option"
                                         />
-                                        <ErrorMessage name="locationId" component="div" className='text-red-500 text-sm' />
+                                        <ErrorMessage name="allocatedLocationId" component="div" className='text-red-500 text-sm' />
                                     </div>
                                 </div>
                                 <div>

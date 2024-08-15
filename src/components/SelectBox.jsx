@@ -19,6 +19,7 @@ const SelectBox = ({
             <select
                 {...field}
                 {...props}
+                onChange={e => form.setFieldValue(field.name, e.target.value)}
                 value={field.value} // Use field.value directly
                 className="
                     w-[195px] 
