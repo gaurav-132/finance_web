@@ -6,11 +6,11 @@ import Sidebar from '../../components/Sidebar';
 
 const AdminLayout = () => {
     
-    const isAuthenticated = false;
+    
     return (
         <div className="flex flex-col bg-[#F9FAFB] h-screen">
             {/* <Header /> */}
-            <div className='flex justify-evenly flex-1 w-full py-8 px-10 overflow-hidden '>
+            <div className='flex justify-evenly flex-1 w-full py-8 px-10 overflow-hidden '> 
                 <div className='hidden md:blocfixed top-0 bottom-0 w-[26%] md:block'>
                     <Sidebar />
                 </div>

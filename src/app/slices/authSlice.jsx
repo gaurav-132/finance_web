@@ -1,14 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { postData } from "../../services/postData";
-import { buildExtraReducers } from "../../utils/extraReducerHelper";
 
 export const loginUser = createAsyncThunk(
     'auth/loginUser',
     async (userData, thunkAPI) => {
         try {
-            const response = await postData('/v1/auth/login', userData);;
+            const response = await postData('/v1/auth/login', userData);
             localStorage.setItem('token', response.data.token);
-            console.log(response.data);
             return {
                 isAuthenticated: true,
                 token: response.data.token
@@ -23,15 +21,15 @@ export const loginUser = createAsyncThunk(
 const loadAuthState = () => {
     const token = localStorage.getItem('token');
     const isAuthenticated = token ? true : false;
-
+  
     return {
         isAuthenticated,
         token
     };
 };
+  
 
 const initialState = loadAuthState();
-
 
 const authSlice = createSlice({
     name: 'auth',
@@ -42,8 +40,8 @@ const authSlice = createSlice({
     },
     reducers: {
         logout: (state) => {
+            state.isAuthenticated = false;
             state.token = null;
-            state.user = null;
             localStorage.removeItem('token');
         },
         checkAuthentication: (state) => {
@@ -55,7 +53,6 @@ const authSlice = createSlice({
         builder
             .addCase(loginUser.pending, (state) => {
                 state.status = 'loading';
-                state.error = null;
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.status = 'succeeded';
@@ -65,10 +62,9 @@ const authSlice = createSlice({
             .addCase(loginUser.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
-            })
+            });
     }
 });
-
 
 export const { logout } = authSlice.actions;
 export default authSlice.reducer;
