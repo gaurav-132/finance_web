@@ -15,13 +15,13 @@ const Employees = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const { employees, total, limit, page, status, error, updateResponse } = useSelector((state) => state.employees);
-    const [filterData, setFilterData] = useState({
+    const filterData = {
         total:0,
         limit:10,
         page:1,
         allocatedLocationId:0,
         employeeName:'',
-    });
+    }
 
 
     const [initialValues, setInitialValues] = useState({
@@ -35,6 +35,7 @@ const Employees = () => {
     });
 
 
+
     useEffect(() => {
         dispatch(fetchAllEmployees(filterData));
     }, [dispatch]);
@@ -46,6 +47,7 @@ const Employees = () => {
         }
     }, [updateResponse]);
 
+    
     
 
     const changeModalStatus = (employee) => {
@@ -77,9 +79,21 @@ const Employees = () => {
         { value: '2', label: 'Roorkee' },
     ];
 
-    const handleSubmit = (values) => {
-        console.log(values)
+    const handleSubmit = (values, {setSubmitting}) => {
         dispatch(fetchAllEmployees(values));
+        setSubmitting(false); 
+    }
+
+    const clearData = (resetForm) => {
+        const filterData = {
+            total:0,
+            limit:10,
+            page:1,
+            allocatedLocationId:0,
+            employeeName:'',
+        };
+        dispatch(fetchAllEmployees(filterData));
+        resetForm();
     }
 
     return (
@@ -93,7 +107,7 @@ const Employees = () => {
                         initialValues={filterData}
                         onSubmit={handleSubmit}
                     >
-                        {({ isSubmitting }) => (
+                        {({ isSubmitting, resetForm }) => (
                             <Form className=''>
                                 <div className='flex w-full'>
                                     <div className='mr-10'>
@@ -128,8 +142,8 @@ const Employees = () => {
                                             {isSubmitting ? 'Searching...' : 'Search'}
                                         </Button>
                                         <Button
-                                            type='submit'
-                                            disabled={isSubmitting}
+                                            type='button'
+                                            onClick={() => clearData(resetForm)}
                                             className='bg-red-600 text-white focus:ring-0 focus:outline-none w-auto py-1 mr-4 font-semibold'
                                         >
                                             Clear
@@ -146,7 +160,7 @@ const Employees = () => {
                 }
                 {
                     status === 'succeeded' && employees.length === 0 && 
-                    <div className='border px-2 py-2 rounded text-sm font-bold text-white bg-red-600'>No Employees Found</div>
+                    <div className='border my-2 px-2 py-2 rounded text-sm font-bold text-white bg-red-600'>No Employees Found</div>
                 }
                 {status === 'succeeded' && employees.length > 0 && (
                     <div>

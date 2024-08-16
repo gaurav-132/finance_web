@@ -6,8 +6,9 @@ import { postData } from '../../services/postData';
 export const fetchAllEmployees = createAsyncThunk(
     'employees/fetchAllEmployees',
     async (filterData,thunkAPI) => {
+        console.log(filterData);
         try {
-            const response = await postData('/v1/employees/get-employees', {page: filterData.page, limit: filterData.limit});
+            const response = await postData('/v1/employees/get-employees', filterData);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -49,7 +50,7 @@ const employeesSlice = createSlice({
         .addCase(fetchAllEmployees.fulfilled, (state, action) => {
             state.status = 'succeeded';
             state.employees = action.payload.employees;
-            state.total = action.payload.count;
+            state.total = action.payload.total;
             state.page = action.payload.page;
             state.limit = action.payload.limit;
         })
