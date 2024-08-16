@@ -12,6 +12,7 @@ import Loans from './pages/loans/Loans.jsx'
 import Todaysdata from './pages/todays/Todaysdata.jsx'
 import LoanRequests from './pages/loanrequests/LoanRequests.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
+import Users from './pages/users/Users.jsx'
 
 function App() {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -21,6 +22,8 @@ function App() {
                 <ErrorBoundary>
             <Routes>
                     <Route path="/admin/login" element={!isAuthenticated ? <Login /> : <Navigate to='/admin/dashboard' />} />
+                   
+
                     <Route path="admin" element={<Navigate to={isAuthenticated ? '/admin/dashboard' : '/admin/login'} />} />
 
                     <Route path="admin/*" element={<AdminLayout />}>
@@ -32,7 +35,7 @@ function App() {
                         <Route path="todays" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Todaysdata /></ProtectedRoute>} />
                         <Route path="requests" element={<ProtectedRoute isAuthenticated={isAuthenticated}><LoanRequests /></ProtectedRoute>} />
                         <Route path="salary" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Customers /></ProtectedRoute>} />
-
+                        <Route path="users" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Users /></ProtectedRoute>} />
                     </Route>
             </Routes>
                 </ErrorBoundary>
