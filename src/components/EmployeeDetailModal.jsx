@@ -13,7 +13,8 @@ const EmployeeDetailModal = ({
     onChange,
     modalWidth,
     initialValues,
-    submitDetails
+    submitDetails,
+    height
 }) => {
 
     
@@ -49,6 +50,7 @@ const EmployeeDetailModal = ({
             onChange={onChange}
             minHeigth="350px"
             top="40%"
+            height={height}
         >
             <Formik
                 initialValues={initialValues}
@@ -57,8 +59,8 @@ const EmployeeDetailModal = ({
             >
             {({ isSubmitting }) => (
                 <Form className='px-4'>
-                    <div className='flex flex-wrap justify-center'>
-                        <div className='mr-10 mb-4'>
+                    <div className='flex mb-2 flex-wrap justify-center'>
+                        <div className='mr-10 '>
                             <Field
                                 id="aadhaarNo"
                                 name="aadhaarNo"
@@ -68,7 +70,7 @@ const EmployeeDetailModal = ({
                             />
                             <ErrorMessage name="aadhaarNo" component="div" className='text-red-500 text-sm' />
                         </div>
-                        <div className='mr-10 mb-4'>
+                        <div className='mr-10 '>
                             <Field
                                 id="panNo"
                                 name="panNo"
@@ -78,7 +80,7 @@ const EmployeeDetailModal = ({
                             />
                             <ErrorMessage name="panNo" component="div" className='text-red-500 text-sm' />
                         </div>
-                        <div className='mb-4'>
+                        <div className=''>
                             <Field
                                 id="allocatedLocationId"
                                 name="allocatedLocationId"
@@ -91,8 +93,8 @@ const EmployeeDetailModal = ({
                         </div>
                     </div>
 
-                    <div className='mb-4 flex flex-wrap justify-center'>
-                        <div className='mr-10 mb-4'>
+                    <div className='mb-2 flex flex-wrap justify-center'>
+                        <div className='mr-10'>
                             <Field name="markSheet">
                                 {({ field, form }) => (
                                     <FileUploadBox
@@ -106,7 +108,7 @@ const EmployeeDetailModal = ({
                                 )}
                             </Field>
                         </div>
-                        <div className='mr-10 mb-4'>
+                        <div className='mr-10'>
                             <Field name="photo">
                                 {({ field, form }) => (
                                     <FileUploadBox
@@ -120,7 +122,7 @@ const EmployeeDetailModal = ({
                                 )}
                             </Field>
                         </div>
-                        <div className='mb-4'>
+                        <div className=''>
                             <Field name="check">
                                 {({ field, form }) => (
                                     <FileUploadBox

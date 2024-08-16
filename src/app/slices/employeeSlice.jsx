@@ -6,7 +6,6 @@ import { postData } from '../../services/postData';
 export const fetchAllEmployees = createAsyncThunk(
     'employees/fetchAllEmployees',
     async (filterData,thunkAPI) => {
-        console.log(filterData);
         try {
             const response = await postData('/v1/employees/get-employees', filterData);
             return response.data;
@@ -21,8 +20,6 @@ export const updateEmployee = createAsyncThunk(
     async (formData,thunkAPI) => {
         try {
             const response = await postData('/v1/employees/update-details', formData);
-            console.log(response);
-
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);

@@ -9,7 +9,7 @@ const Modal = ({
     description,
     children,
     modalWidth,
-    minHeigth,
+    minHeight,
     topMd,
     top,
     height
@@ -31,7 +31,7 @@ const Modal = ({
                 '
             >
                 <Dialog.Content
-                    style={{ width: `${modalWidth}`, minHeight: `${minHeigth}`, top: `${top}`, height: `${height}`}}
+                    style={{ width: `${modalWidth}`, minHeight: `${minHeight}`, top: `${top}`, height: `${height}`}}
                     className='
                     fixed
                     drop-shadow-sm

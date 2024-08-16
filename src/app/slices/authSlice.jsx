@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { postData } from "../../services/postData";
+import { buildExtraReducers } from "../../utils/extraReducerHelper";
 
 export const loginUser = createAsyncThunk(
     'auth/loginUser',
@@ -10,6 +11,21 @@ export const loginUser = createAsyncThunk(
             return {
                 isAuthenticated: true,
                 token: response.data.token
+            };
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const registerUser = createAsyncThunk(
+    'auth/registerUser',
+    async (userData, thunkAPI) => {
+        try {
+            console.log(userData);
+            const response = await postData('/v1/users/add-user', userData);
+            return {
+                isAuthenticated: true,
             };
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -62,9 +78,20 @@ const authSlice = createSlice({
             .addCase(loginUser.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
-            });
+            })
+            .addCase(registerUser.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(registerUser.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+            })
+            .addCase(registerUser.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            })
     }
 });
 
-export const { logout } = authSlice.actions;
+
+export const { logout, checkAuthentication  } = authSlice.actions;
 export default authSlice.reducer;
