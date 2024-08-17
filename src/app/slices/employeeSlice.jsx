@@ -7,7 +7,19 @@ export const fetchAllEmployees = createAsyncThunk(
     'employees/fetchAllEmployees',
     async (filterData,thunkAPI) => {
         try {
-            const response = await postData('/v1/employees/get-employees', filterData);
+            const response = 
+            {
+                data: {
+                    employees: [
+                        { id: 1, name: 'John Doe', mobile: '123-456-7890', allocatedLocationId: 'New York', totalLoans: 5, totalAmt: 10000 },
+                        { id: 2, name: 'Jane Smith', mobile: '098-765-4321', allocatedLocationId: 'Haridwar', totalLoans: 8, totalAmt: 15000 },
+                        { id: 3, name: 'Sam Wilson', mobile: '111-222-3333', allocatedLocationId: 'Chicago', totalLoans: 3, totalAmt: 5000 },
+                    ],
+                    count: 3, // Total number of employees
+                    page: filterData.page,
+                    limit: filterData.limit,
+                }
+            } || await postData('/v1/employees/get-employees', filterData);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);

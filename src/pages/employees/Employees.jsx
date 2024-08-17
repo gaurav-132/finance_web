@@ -7,14 +7,17 @@ import AlertModal from '../../components/AlertModal';
 import SelectBox from '../../components/SelectBox';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import InputBox from '../../components/InputBox';
+import EmployeeDetailsModal from '../../components/EmployeeDetailsModal';
 
 const Employees = () => {
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isemployeeDetailsModalOpen,setIsEmployeeDetailsModal] = useState(false);
     const [openAlertModal, setOpenAlertModal] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const { employees, total, limit, page, status, error, updateResponse } = useSelector((state) => state.employees);
+    const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
     const filterData = {
         total:0,
         limit:10,
@@ -48,7 +51,11 @@ const Employees = () => {
     }, [updateResponse]);
 
     
-    
+    const handleEmployeeClick = (employeeId) => {
+        setSelectedEmployeeId(employeeId);
+        setIsEmployeeDetailsModal(true);
+    };
+  
 
     const changeModalStatus = (employee) => {
         setInitialValues({
@@ -198,9 +205,9 @@ const Employees = () => {
                             </thead>
                             <tbody className='overflow-y-scroll'>
                                 {employees.slice(0,10).map((employee, index) => (
-                                    <tr className='border-b' key={index}>
+                                    <tr className='border-b' key={index} >
                                         <td className="py-1 border text-sm px-5">{index+1}</td>
-                                        <td className="py-1 border text-sm px-5">{employee.name}</td>
+                                        <td className="py-1 border text-sm px-5 hover:cursor-pointer" onClick={() => handleEmployeeClick(employee.id)}>{employee.name}</td>
                                         <td className="py-1 border text-sm px-5">{employee.mobile}</td>
                                         <td className="py-1 border text-sm px-5">{employee.allocatedLocationId}</td>
                                         <td className="py-1 border text-sm px-5">{employee.aadhaarNo}</td>
@@ -234,6 +241,13 @@ const Employees = () => {
                 isOpen={openAlertModal}
                 onChange={setOpenAlertModal}
                 message={alertMessage}
+            />
+            <EmployeeDetailsModal
+               isOpen={isemployeeDetailsModalOpen}
+               onChange={setIsEmployeeDetailsModal}
+               employeeId={selectedEmployeeId}
+               modalWidth="70%"
+               height="600px"
             />
         </div>
     );
