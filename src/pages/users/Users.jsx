@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from 'react'
 import Button from '../../components/Button'
-import { fetchAllUsers } from '../../app/slices/usersSlice'
+import { fetchAllUsers } from '../../app/slices/userSlice'
 import { useSelector,useDispatch } from 'react-redux'
 import { Formik,Form,Field,ErrorMessage } from 'formik'
 import InputBox from '../../components/InputBox'
@@ -21,8 +21,7 @@ function Users() {
         total:0,
         limit:10,
         page:1,
-        allocatedLocationId:0,
-        UserName:'',
+        name:'',
     });
     
     const [initialValues, setInitialValues] = useState({
@@ -63,19 +62,23 @@ function Users() {
         dispatch(fetchAllUsers(filterData));
     };
 
-    const handleSubmitDetails =  (formData) => {
-        dispatch(updateEmployee(formData));
-    };
 
-    const handleSubmit = (values) => {
-        console.log(values);
+    const handleSubmit = (values, { setSubmitting }) => {
         dispatch(fetchAllUsers(values));
+        setSubmitting(false)
     };
 
-    const options = [
-        { value: '1', label: 'Haridwar' },
-        { value: '2', label: 'Roorkee' },
-    ];
+    const clearData = (resetForm) => {
+        const filterData = {
+            total:0,
+            limit:10,
+            page:1,
+            allocatedLocationId:0,
+            employeeName:'',
+        };
+        dispatch(fetchAllUsers(filterData));
+        resetForm();
+    }
 
     return (
     <div className="h-full">
@@ -95,13 +98,13 @@ function Users() {
                         initialValues={filterData}
                         onSubmit={handleSubmit}
                     >
-                        {({ isSubmitting }) => (
+                        {({ isSubmitting, resetForm }) => (
                             <Form className=''>
                                 <div className='flex w-full'>
                                     <div className='mr-10'>
                                         <Field
-                                            id="userName"
-                                            name="userName"
+                                            id="name"
+                                            name="name"
                                             type="text"
                                             label="User Name"
                                             as={InputBox}
@@ -121,6 +124,7 @@ function Users() {
                                         <Button
                                             type='submit'
                                             disabled={isSubmitting}
+                                            onClick={() => clearData(resetForm)}
                                             className='bg-red-600 text-white focus:ring-0 focus:outline-none w-auto py-1 mr-4 font-semibold'
                                         >
                                             Clear
@@ -137,7 +141,7 @@ function Users() {
                 }
                 {
                     status === 'succeeded' && users.length === 0 && 
-                    <div className='border px-2 py-2 rounded text-sm font-bold text-white bg-red-600'>No Users Found</div>
+                    <div className='border px-2 mt-2 py-2 rounded text-sm font-bold text-white bg-red-600'>No Users Found</div>
                 }
                 {status === 'succeeded' && users.length > 0 && (
                     <div>
@@ -179,14 +183,7 @@ function Users() {
                                         <td className="py-1 border text-sm px-5">{user.mobile}</td>
                                         <td className="py-1 border text-sm px-5">{user.isActive}</td>                                 
                                         <td className="py-1 border text-sm px-5 text-right">
-                                            <Button
-                                                type='submit'
-                                                disabled={false}
-                                                onClick={() => changeModalStatus(user)}
-                                                className='bg-[#F44336] py-1 text-white focus:ring-0 focus:outline-none w-full font-semibold'
-                                            >
-                                                Edit
-                                            </Button>
+                                            
                                         </td>
                                     </tr>
                                 ))}
@@ -195,17 +192,12 @@ function Users() {
                     </div>
                 )}
             </div>
-            <EmployeeDetailModal
-                isOpen={isModalOpen}
-                onChange={setIsModalOpen}
-                modalWidth="60%"
-                initialValues={initialValues}
-                submitDetails={handleSubmitDetails}
-            />
+            
             <RegisterModal
                 isOpen={openRegisterModal}
                 onChange={setRegisterModal}
-                modalWidth="50%"
+                modalWidth="60%"
+                height="350px"
             />
     </div>
   )
