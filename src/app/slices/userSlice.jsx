@@ -6,7 +6,7 @@ export const fetchAllUsers = createAsyncThunk(
     'users/fetchAllUsers',
     async (filterData, thunkAPI) => {
         try {
-            const response = await postData('/v1/users/get-users', filterData);
+            const response =await postData('/v1/users/get-users', filterData);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);

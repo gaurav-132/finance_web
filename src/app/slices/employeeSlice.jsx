@@ -7,7 +7,7 @@ export const fetchAllEmployees = createAsyncThunk(
     'employees/fetchAllEmployees',
     async (filterData,thunkAPI) => {
         try {
-            const response = await postData('/v1/employees/get-employees', filterData);
+            const response = await postData('/v1/employees/get-employees', filterData, thunkAPI.dispatch);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -19,7 +19,7 @@ export const updateEmployee = createAsyncThunk(
     'employees/updateEmployee',
     async (formData,thunkAPI) => {
         try {
-            const response = await postData('/v1/employees/update-details', formData);
+            const response = await postData('/v1/employees/update-details', formData, thunkAPI);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);

@@ -2,19 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllEmployees, updateEmployee } from '../../app/slices/employeeSlice';
 import Button from '../../components/Button';
-import EmployeeDetailModal from '../../components/EmployeeDetailModal';
 import AlertModal from '../../components/AlertModal';
 import SelectBox from '../../components/SelectBox';
 import { Formik, Form, Field, ErrorMessage } from 'formik'; 
 import InputBox from '../../components/InputBox';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import EmployeeDetailsModal from '../../components/EmployeeDetailsModal';
+import UpdateEmployeeDetailModal from '../../components/UpdateEmployeeDetailModal';
 
 const Employees = () => {
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isemployeeDetailsModalOpen,setIsEmployeeDetailsModal] = useState(false);
     const [openAlertModal, setOpenAlertModal] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showFilter, setShowFilter] = useState(false);
     const { employees, total, limit, page, status, error, updateResponse } = useSelector((state) => state.employees);
+    const [employee, setEmployee] = useState({});
     const filterData = {
         total:0,
         limit:10,
@@ -48,7 +53,11 @@ const Employees = () => {
     }, [updateResponse]);
 
     
-    
+    const showEmpDetails = (employee) => {
+        setEmployee(employee);
+        setIsEmployeeDetailsModal(true);
+    };
+  
 
     const changeModalStatus = (employee) => {
         setInitialValues({
@@ -101,58 +110,63 @@ const Employees = () => {
             <div className='bg-[#373737] rounded-md px-2 py-3'>
                 <h2 className='text-white font-bold'>Employees</h2>
             </div>
-            <div className=''>
-                <div className="flex  mt-4">
-                    <Formik
-                        initialValues={filterData}
-                        onSubmit={handleSubmit}
-                    >
-                        {({ isSubmitting, resetForm }) => (
-                            <Form className=''>
-                                <div className='flex w-full'>
-                                    <div className='mr-10'>
-                                        <Field
-                                            id="employeeName"
-                                            name="employeeName"
-                                            type="text"
-                                            label="Employee Name"
-                                            as={InputBox}
-                                        />
-                                        <ErrorMessage name="aadhaarNo" component="div" className='text-red-500 text-sm' />
+            <div >
+                <div className='relative' style={{ paddingBottom: showFilter ? '0px' : 60 }}>
+                    <div className="mt-4" style={{ display: showFilter ? 'flex' : 'none' }}>
+                        <Formik
+                            initialValues={filterData}
+                            onSubmit={handleSubmit}
+                        >
+                            {({ isSubmitting, resetForm }) => (
+                                <Form className=''>
+                                    <div className='flex w-full'>
+                                        <div className='mr-10'>
+                                            <Field
+                                                id="employeeName"
+                                                name="employeeName"
+                                                type="text"
+                                                label="Employee Name"
+                                                as={InputBox}
+                                            />
+                                            <ErrorMessage name="aadhaarNo" component="div" className='text-red-500 text-sm' />
+                                        </div>
+                                        <div className='mr-10'>
+                                            <Field
+                                                id="allocatedLocationId"
+                                                name="allocatedLocationId"
+                                                label="Select Location"
+                                                component={SelectBox}
+                                                options={options}
+                                                placeholder="Select an option"
+                                            />
+                                            <ErrorMessage name="allocatedLocationId" component="div" className='text-red-500 text-sm' />
+                                        </div>
                                     </div>
-                                    <div className='mr-10'>
-                                        <Field
-                                            id="allocatedLocationId"
-                                            name="allocatedLocationId"
-                                            label="Select Location"
-                                            component={SelectBox}
-                                            options={options}
-                                            placeholder="Select an option"
-                                        />
-                                        <ErrorMessage name="allocatedLocationId" component="div" className='text-red-500 text-sm' />
+                                    <div>
+                                        <div className='mr-10'>
+                                            <Button
+                                                type='submit'
+                                                disabled={isSubmitting}
+                                                className='bg-blue-600 text-white focus:ring-0 focus:outline-none w-auto py-1 mr-4 font-semibold'
+                                            >
+                                                {isSubmitting ? 'Searching...' : 'Search'}
+                                            </Button>
+                                            <Button
+                                                type='button'
+                                                onClick={() => clearData(resetForm)}
+                                                className='bg-red-600 text-white focus:ring-0 focus:outline-none w-auto py-1 mr-4 font-semibold'
+                                            >
+                                                Clear
+                                            </Button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <div className='mr-10'>
-                                        <Button
-                                            type='submit'
-                                            disabled={isSubmitting}
-                                            className='bg-blue-600 text-white focus:ring-0 focus:outline-none w-auto py-1 mr-4 font-semibold'
-                                        >
-                                            {isSubmitting ? 'Searching...' : 'Search'}
-                                        </Button>
-                                        <Button
-                                            type='button'
-                                            onClick={() => clearData(resetForm)}
-                                            className='bg-red-600 text-white focus:ring-0 focus:outline-none w-auto py-1 mr-4 font-semibold'
-                                        >
-                                            Clear
-                                        </Button>
-                                    </div>
-                                </div>
-                            </Form>
-                        )}
-                    </Formik>
+                                </Form>
+                            )}
+                        </Formik>
+                    </div>
+                    <div className='absolute top-0 right-0' style={{ marginTop: showFilter ? '0px' : '16px' }}>
+                        <FontAwesomeIcon onClick={() => setShowFilter(!showFilter)} className='text-xl' icon="fa-solid fa-filter" />
+                    </div>
                 </div>
                 {
                     status === 'pending' && 
@@ -198,9 +212,9 @@ const Employees = () => {
                             </thead>
                             <tbody className='overflow-y-scroll'>
                                 {employees.slice(0,10).map((employee, index) => (
-                                    <tr className='border-b' key={index}>
+                                    <tr className='border-b' key={index} >
                                         <td className="py-1 border text-sm px-5">{index+1}</td>
-                                        <td className="py-1 border text-sm px-5">{employee.name}</td>
+                                        <td className="py-1 border text-sm px-5 hover:cursor-pointer" onClick={() => showEmpDetails(employee)}>{employee.name}</td>
                                         <td className="py-1 border text-sm px-5">{employee.mobile}</td>
                                         <td className="py-1 border text-sm px-5">{employee.allocatedLocationId}</td>
                                         <td className="py-1 border text-sm px-5">{employee.aadhaarNo}</td>
@@ -222,7 +236,7 @@ const Employees = () => {
                     </div>
                 )}
             </div>
-            <EmployeeDetailModal
+            <UpdateEmployeeDetailModal
                 isOpen={isModalOpen}
                 onChange={setIsModalOpen}
                 modalWidth="60%"
@@ -234,6 +248,13 @@ const Employees = () => {
                 isOpen={openAlertModal}
                 onChange={setOpenAlertModal}
                 message={alertMessage}
+            />
+            <EmployeeDetailsModal
+                isOpen={isemployeeDetailsModalOpen}
+                onChange={setIsEmployeeDetailsModal}
+                employee={employee}
+                modalWidth="60%"
+                height="200px"
             />
         </div>
     );

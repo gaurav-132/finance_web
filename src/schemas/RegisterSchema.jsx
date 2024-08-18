@@ -5,8 +5,7 @@ const registerSchema = Yup.object().shape({
     lastName: Yup.string().required('Last name is required'),
     mobile: Yup.string().required('Mobile number is required'),
     password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
-    isAdmin: Yup.boolean(),
-    isActive: Yup.boolean().required('Active status is required'),
+    isAdmin: Yup.number(),
 });
 
 export default registerSchema;

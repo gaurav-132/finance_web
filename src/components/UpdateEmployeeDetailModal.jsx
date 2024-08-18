@@ -8,7 +8,7 @@ import SelectBox from './SelectBox';
 import FileUploadBox from './FileUploadBox';
 
 
-const EmployeeDetailModal = ({
+const UpdateEmployeeDetailModal = ({
     isOpen,
     onChange,
     modalWidth,
@@ -56,6 +56,7 @@ const EmployeeDetailModal = ({
                 initialValues={initialValues}
                 validationSchema={UpdateEmployeeSchema}
                 onSubmit={handleSubmit}
+                validateOnBlur={false} 
             >
             {({ isSubmitting }) => (
                 <Form className='px-4'>
@@ -153,4 +154,4 @@ const EmployeeDetailModal = ({
     );
 }
 
-export default EmployeeDetailModal;
+export default UpdateEmployeeDetailModal;

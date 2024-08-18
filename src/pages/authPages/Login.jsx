@@ -15,7 +15,6 @@ const Login = () => {
 
     const handleSubmit = (values, { setSubmitting }) => {
         dispatch(loginUser(values))
-            .unwrap()
             .then(() => {
                 navigate('/admin/dashboard');
             })
