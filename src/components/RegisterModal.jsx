@@ -17,6 +17,7 @@ const RegisterModal = ({ isOpen, modalWidth, onChange, height, filterData }) => 
             console.log(values);
             await dispatch(registerUser(values)).unwrap();
             setSubmitting(false);
+            
             onChange(false);
             dispatch(fetchAllUsers(filterData));
         } catch (error) {   
