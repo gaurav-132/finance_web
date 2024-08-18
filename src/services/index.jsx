@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Create axios instance with base URL and headers
 const api = axios.create({
     baseURL: 'http://localhost:3000/api', 
     headers: {
@@ -28,11 +27,10 @@ api.interceptors.response.use(
     response => response,
     error => {
         if (error.response && error.response.status === 401) {
-            // Trigger an error that can be handled by the caller
             return Promise.reject({ message: 'token_expired', originalError: error });
         }
         
-        return Promise.reject(error);  // Reject the promise with the error
+        return Promise.reject(error);  
     }
 );
 
