@@ -6,6 +6,6 @@ const api = axios.create({
         // 'Content-Type': 'application/json',
         'Authorization' : localStorage.getItem('token') ? localStorage.getItem('token'): null,
     },
-});
+});   
 
 export default api;

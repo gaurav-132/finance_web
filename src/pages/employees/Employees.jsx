@@ -5,7 +5,7 @@ import Button from '../../components/Button';
 import EmployeeDetailModal from '../../components/EmployeeDetailModal';
 import AlertModal from '../../components/AlertModal';
 import SelectBox from '../../components/SelectBox';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik'; 
 import InputBox from '../../components/InputBox';
 
 const Employees = () => {
