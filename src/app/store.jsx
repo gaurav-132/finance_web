@@ -3,6 +3,7 @@ import authReducer from './slices/authSlice';
 import loansReducer from "./slices/loansSlice";
 import employeesReducer from './slices/employeeSlice';
 import usersReducer from './slices/userSlice';
+import customersReducer from './slices/customerSlice';
 
 const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
         loans:loansReducer,
         employees: employeesReducer,
         users :usersReducer,
+        customers: customersReducer,
     }
 });
 

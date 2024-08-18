@@ -4,7 +4,7 @@ import { fetchAllEmployees, updateEmployee } from '../../app/slices/employeeSlic
 import Button from '../../components/Button';
 import AlertModal from '../../components/AlertModal';
 import SelectBox from '../../components/SelectBox';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik'; 
 import InputBox from '../../components/InputBox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import EmployeeDetailsModal from '../../components/EmployeeDetailsModal';
