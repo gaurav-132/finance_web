@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { faCloud, faDashboard, faHome , faNoteSticky,faCalendarWeek, faPersonCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-// Define icon mappings
 const iconMapping = {
     faHome: faHome,
     faCloud: faCloud,
@@ -14,7 +13,7 @@ const iconMapping = {
 };
 
 const Sidebar = () => {
-    const [activeLink, setActiveLink] = useState('');
+    const [activeLink, setActiveLink] = useState('Dashboard');
 
     useEffect(() => {
         const savedActiveLink = localStorage.getItem('activeLink');

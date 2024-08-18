@@ -9,6 +9,7 @@ import RegisterModal from '../../components/RegisterModal'
 import AlertModal from '../../components/AlertModal'
 import EmployeeDetailModal from '../../components/UpdateEmployeeDetailModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Pagination from '../../components/Pagination'
 
 function Users() {
 
@@ -145,26 +146,12 @@ function Users() {
             }
             {status === 'succeeded' && users.length > 0 && (
                 <div>
-                    <div className="pagination flex justify-between my-2 items-center">
-                        <div>
-                            <p className='text-sm'>Total Users: {total}</p>
-                        </div>
-                        <div className='text-right'>
-                            <Button
-                                disabled={page === 1}
-                                className='text-sm bg-red-700 py-1'
-                                onClick={() => handlePageChange(page - 1)}>
-                                Previous
-                            </Button>
-                            <span className='text-sm mx-4'>Page {page} of {Math.ceil(total / limit)}</span>
-                            <Button
-                                className='text-sm bg-red-700 py-1'
-                                disabled={page * limit >= total}
-                                onClick={() => handlePageChange(page + 1)}>
-                                Next
-                            </Button>
-                        </div>
-                    </div>
+                    <Pagination
+                        page={page}
+                        limit={limit}
+                        handlePageChange={handlePageChange}
+                        total={total}
+                    />
                     <table className='w-full border'>
                         <thead>
                             <tr className='border-b'>
