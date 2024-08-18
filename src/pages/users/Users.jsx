@@ -7,7 +7,7 @@ import InputBox from '../../components/InputBox'
 import SelectBox from '../../components/SelectBox'
 import RegisterModal from '../../components/RegisterModal'
 import AlertModal from '../../components/AlertModal'
-import EmployeeDetailModal from '../../components/EmployeeDetailModal'
+import EmployeeDetailModal from '../../components/UpdateEmployeeDetailModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 function Users() {

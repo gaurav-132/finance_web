@@ -9,7 +9,7 @@ const store = configureStore({
         auth: authReducer,
         loans:loansReducer,
         employees: employeesReducer,
-        users :usersReducer
+        users :usersReducer,
     }
 });
 

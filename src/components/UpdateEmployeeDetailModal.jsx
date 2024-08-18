@@ -8,7 +8,7 @@ import SelectBox from './SelectBox';
 import FileUploadBox from './FileUploadBox';
 
 
-const EmployeeDetailModal = ({
+const UpdateEmployeeDetailModal = ({
     isOpen,
     onChange,
     modalWidth,
@@ -154,4 +154,4 @@ const EmployeeDetailModal = ({
     );
 }
 
-export default EmployeeDetailModal;
+export default UpdateEmployeeDetailModal;

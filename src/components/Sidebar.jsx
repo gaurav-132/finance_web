@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { faCloud, faDashboard, faHome , faNoteSticky,faCalendarWeek, faPersonCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,10 +14,18 @@ const iconMapping = {
 };
 
 const Sidebar = () => {
-    const [activeLink, setActiveLink] = useState('Dashboard');
+    const [activeLink, setActiveLink] = useState('');
+
+    useEffect(() => {
+        const savedActiveLink = localStorage.getItem('activeLink');
+        if (savedActiveLink) {
+            setActiveLink(savedActiveLink);
+        }
+    }, []);
 
     const handleClick = (link) => {
         setActiveLink(link);
+        localStorage.setItem('activeLink', link); 
     };
 
     const links = [

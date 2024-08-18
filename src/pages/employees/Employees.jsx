@@ -2,21 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllEmployees, updateEmployee } from '../../app/slices/employeeSlice';
 import Button from '../../components/Button';
-import EmployeeDetailModal from '../../components/EmployeeDetailModal';
 import AlertModal from '../../components/AlertModal';
 import SelectBox from '../../components/SelectBox';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import InputBox from '../../components/InputBox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import EmployeeDetailsModal from '../../components/EmployeeDetailsModal';
+import UpdateEmployeeDetailModal from '../../components/UpdateEmployeeDetailModal';
 
 const Employees = () => {
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isemployeeDetailsModalOpen,setIsEmployeeDetailsModal] = useState(false);
     const [openAlertModal, setOpenAlertModal] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [showFilter, setShowFilter] = useState(false);
     const { employees, total, limit, page, status, error, updateResponse } = useSelector((state) => state.employees);
+    const [employee, setEmployee] = useState({});
     const filterData = {
         total:0,
         limit:10,
@@ -50,7 +53,11 @@ const Employees = () => {
     }, [updateResponse]);
 
     
-    
+    const showEmpDetails = (employee) => {
+        setEmployee(employee);
+        setIsEmployeeDetailsModal(true);
+    };
+  
 
     const changeModalStatus = (employee) => {
         setInitialValues({
@@ -205,9 +212,9 @@ const Employees = () => {
                             </thead>
                             <tbody className='overflow-y-scroll'>
                                 {employees.slice(0,10).map((employee, index) => (
-                                    <tr className='border-b' key={index}>
+                                    <tr className='border-b' key={index} >
                                         <td className="py-1 border text-sm px-5">{index+1}</td>
-                                        <td className="py-1 border text-sm px-5">{employee.name}</td>
+                                        <td className="py-1 border text-sm px-5 hover:cursor-pointer" onClick={() => showEmpDetails(employee)}>{employee.name}</td>
                                         <td className="py-1 border text-sm px-5">{employee.mobile}</td>
                                         <td className="py-1 border text-sm px-5">{employee.allocatedLocationId}</td>
                                         <td className="py-1 border text-sm px-5">{employee.aadhaarNo}</td>
@@ -229,7 +236,7 @@ const Employees = () => {
                     </div>
                 )}
             </div>
-            <EmployeeDetailModal
+            <UpdateEmployeeDetailModal
                 isOpen={isModalOpen}
                 onChange={setIsModalOpen}
                 modalWidth="60%"
@@ -241,6 +248,13 @@ const Employees = () => {
                 isOpen={openAlertModal}
                 onChange={setOpenAlertModal}
                 message={alertMessage}
+            />
+            <EmployeeDetailsModal
+                isOpen={isemployeeDetailsModalOpen}
+                onChange={setIsEmployeeDetailsModal}
+                employee={employee}
+                modalWidth="60%"
+                height="200px"
             />
         </div>
     );
