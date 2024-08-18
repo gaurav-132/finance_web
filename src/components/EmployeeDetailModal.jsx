@@ -56,6 +56,7 @@ const EmployeeDetailModal = ({
                 initialValues={initialValues}
                 validationSchema={UpdateEmployeeSchema}
                 onSubmit={handleSubmit}
+                validateOnBlur={false} 
             >
             {({ isSubmitting }) => (
                 <Form className='px-4'>

@@ -7,20 +7,26 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { registerUser } from '../app/slices/authSlice';
 import registerSchema from '../schemas/registerSchema';
 import { useNavigate } from 'react-router-dom';
+import { fetchAllUsers } from '../app/slices/userSlice';
 
-const RegisterModal = ({ isOpen, modalWidth, onChange, height }) => {
+const RegisterModal = ({ isOpen, modalWidth, onChange, height, filterData }) => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
-    const handleSubmit = (values, { setSubmitting }) => {
-        dispatch(registerUser(values))
-        setSubmitting(false)
-        onChange(false);
+    const handleSubmit = async (values, { setSubmitting }) => {
+        try {
+            console.log(values);
+            await dispatch(registerUser(values)).unwrap();
+            setSubmitting(false);
+            onChange(false);
+            dispatch(fetchAllUsers(filterData));
+        } catch (error) {   
+            console.log("error in register user", user);
+        }
     };
 
     const isAdminOptions = [
-        { value: true, label: 'Yes' },
-        { value: false, label: 'No' },
+        { value: 1, label: 'Yes' },
+        { value: 0, label: 'No' },
     ];
 
     return (
@@ -33,12 +39,21 @@ const RegisterModal = ({ isOpen, modalWidth, onChange, height }) => {
             height={height}
         >
             <Formik
-                initialValues={{ firstName: '', lastName: '', mobile: '', password: '', isAdmin: false, isActive: true }}
+                initialValues={{ 
+                    firstName: '', 
+                    lastName: '', 
+                    mobile: '', 
+                    password: '', 
+                    isAdmin: 0, 
+                }}
                 validationSchema={registerSchema}
                 onSubmit={handleSubmit}
+                validateOnChange={true}  
+                validateOnBlur={false}    // Disable validation on field blur
             >
                 {({ isSubmitting }) => (
                     <Form className="px-10">
+                        {/* Input fields for user registration */}
                         <div className='flex mb-4'>
                             <div className='mr-10 flex-1'>
                                 <label htmlFor="firstName" className='block mb-1'>First Name</label>
@@ -71,6 +86,8 @@ const RegisterModal = ({ isOpen, modalWidth, onChange, height }) => {
                                 <ErrorMessage name="mobile" component="div" className='text-red-500 text-sm' />
                             </div>
                         </div>
+
+                        {/* Password input */}
                         <div className='flex mb-4'>
                             <div className='mr-10 flex-1/2'>
                                 <label htmlFor="password" className='block mb-1'>Password</label>
@@ -82,23 +99,29 @@ const RegisterModal = ({ isOpen, modalWidth, onChange, height }) => {
                                 />
                                 <ErrorMessage name="password" component="div" className='text-red-500 text-sm' />
                             </div>
+
+                            {/* Radio button group for isAdmin */}
                             <div className='flex-1'>
                                 <label className='block mb-1'>Is Admin</label>
                                 <div>
                                     {isAdminOptions.map(option => (
-                                        <div className='inline-block mr-2' key={option.value}>
-                                            <Field
-                                                type="checkbox"
-                                                name="isAdmin"
-                                                id={`isAdmin-${option.value}`}
-                                                value={option.value}
-                                            />
-                                            <label className='ml-1' htmlFor={`isAdmin-${option.value}`}>{option.label}</label>
+                                        <div className='inline-block mr-4' key={option.value}>
+                                            <label className='ml-1'>
+                                                <Field
+                                                    type="radio"
+                                                    name="isAdmin"
+                                                    id={`isAdmin-${option.value}`}
+                                                    value={String(option.value)}  
+                                                />
+                                                &nbsp;&nbsp;{option.label}
+                                            </label>
                                         </div>
                                     ))}
                                 </div>
+                                <ErrorMessage name="isAdmin" component="div" className='text-red-500 text-sm' />
                             </div>
                         </div>
+
                         <div className='text-center mt-5'>
                             <Button
                                 type='submit'

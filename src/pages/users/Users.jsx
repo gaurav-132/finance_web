@@ -8,6 +8,7 @@ import SelectBox from '../../components/SelectBox'
 import RegisterModal from '../../components/RegisterModal'
 import AlertModal from '../../components/AlertModal'
 import EmployeeDetailModal from '../../components/EmployeeDetailModal'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 function Users() {
 
@@ -16,6 +17,8 @@ function Users() {
     const [openAlertModal, setOpenAlertModal] = useState(false);
     const [openRegisterModal,setRegisterModal] = useState(false)
     const [alertMessage, setAlertMessage] = useState('');
+    const [showFilter, setShowFilter] = useState(false);
+
     const {users ,total,limit,page ,status,error,updateResponse} = useSelector((state) => state.users)
     const [filterData, setFilterData] = useState({
         total:0,
@@ -39,19 +42,10 @@ function Users() {
         if (updateResponse) {
             setAlertMessage(updateResponse);
             setOpenAlertModal(true);
+            dispatch(fetchAllUsers());
         }
-    }, [updateResponse]);
+    }, [updateResponse, dispatch]);
 
-    const changeModalStatus = (user) => {
-        setInitialValues({
-            userId: user.id,
-            name: user.firstname,
-            mobile:user.mobile,
-            isActive:user.isActive
-        });
-
-        setIsModalOpen(true);
-    };
 
     const changeRegiterModalStatus = () => {
         setRegisterModal(true);
@@ -82,18 +76,20 @@ function Users() {
 
     return (
     <div className="h-full">
-       <div className='bg-[#373737] rounded-md px-2 py-3 flex justify-between items-center'>
-                <h2 className='text-white font-bold'>Users</h2>
-                <Button
-                    className='bg-blue-600 text-white focus:ring-0 focus:outline-none py-1 px-4 font-semibold'
-                    onClick={() => {changeRegiterModalStatus()} 
-                    }
-                >
-                    Add User
-                </Button>
+        <div className='bg-[#373737] rounded-md px-2 py-3 flex justify-between items-center'>
+            <h2 className='text-white font-bold'>Users</h2>
+            <Button
+                className='bg-blue-600 text-white focus:ring-0 focus:outline-none py-1 px-4 font-semibold'
+                onClick={() => {changeRegiterModalStatus()} 
+                }
+            >
+                Add User
+            </Button>
         </div>
-        <div className=''>
-                <div className="flex  mt-4">
+
+        <div className='py-2'>
+            <div className='relative' style={{ paddingBottom: showFilter ? '0px' : 60 }}>
+                <div className="mt-4" style={{ display: showFilter ? 'flex' : 'none' }}>
                     <Formik
                         initialValues={filterData}
                         onSubmit={handleSubmit}
@@ -135,70 +131,75 @@ function Users() {
                         )}
                     </Formik>
                 </div>
-                {
-                    status === 'pending' && 
-                    <div className='border px-2 py-2 rounded text-sm font-bold text-white bg-yellow-400'>Loading...</div>
-                }
-                {
-                    status === 'succeeded' && users.length === 0 && 
-                    <div className='border px-2 mt-2 py-2 rounded text-sm font-bold text-white bg-red-600'>No Users Found</div>
-                }
-                {status === 'succeeded' && users.length > 0 && (
-                    <div>
-                        <div className="pagination flex justify-between my-2 items-center">
-                            <div>
-                                <p className='text-sm'>Total Users: {total}</p>
-                            </div>
-                            <div className='text-right'>
-                                <Button
-                                    disabled={page === 1}
-                                    className='text-sm bg-red-700 py-1'
-                                    onClick={() => handlePageChange(page - 1)}>
-                                    Previous
-                                </Button>
-                                <span className='text-sm mx-4'>Page {page} of {Math.ceil(total / limit)}</span>
-                                <Button
-                                    className='text-sm bg-red-700 py-1'
-                                    disabled={page * limit >= total}
-                                    onClick={() => handlePageChange(page + 1)}>
-                                    Next
-                                </Button>
-                            </div>
-                        </div>
-                        <table className='w-full border'>
-                            <thead>
-                                <tr className='border-b'>
-                                    <th className="py-2 border text-sm px-5 text-left">Id</th>
-                                    <th className="py-2 border text-sm px-5 text-left">Name</th>
-                                    <th className="py-2 border text-sm px-5 text-left">Contact No</th>
-                                    <th className="py-2 border text-sm px-5 text-left">IsActive</th>
-                                    <th className="py-2 border text-sm px-5 text-right">#</th>
-                                </tr>
-                            </thead>
-                            <tbody className='overflow-y-scroll'>
-                                {users.slice(0,10).map((user, index) => (
-                                    <tr className={`border-b ${user.isAdmin?"bg-green-500":""}`} key={index}>
-                                        <td className="py-1 border text-sm px-5">{index+1}</td>
-                                        <td className="py-1 border text-sm px-5">{user.firstName} {user.lastName}</td>
-                                        <td className="py-1 border text-sm px-5">{user.mobile}</td>
-                                        <td className="py-1 border text-sm px-5">{user.isActive}</td>                                 
-                                        <td className="py-1 border text-sm px-5 text-right">
-                                            
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
+                <div className='absolute top-0 right-0' style={{ marginTop: showFilter ? '0px' : '16px' }}>
+                    <FontAwesomeIcon onClick={() => setShowFilter(!showFilter)} className='text-xl' icon="fa-solid fa-filter" />
+                </div>
             </div>
+            {
+                status === 'pending' && 
+                <div className='border px-2 py-2 rounded text-sm font-bold text-white bg-yellow-400'>Loading...</div>
+            }
+            {
+                status === 'succeeded' && users.length === 0 && 
+                <div className='border px-2 mt-2 py-2 rounded text-sm font-bold text-white bg-red-600'>No Users Found</div>
+            }
+            {status === 'succeeded' && users.length > 0 && (
+                <div>
+                    <div className="pagination flex justify-between my-2 items-center">
+                        <div>
+                            <p className='text-sm'>Total Users: {total}</p>
+                        </div>
+                        <div className='text-right'>
+                            <Button
+                                disabled={page === 1}
+                                className='text-sm bg-red-700 py-1'
+                                onClick={() => handlePageChange(page - 1)}>
+                                Previous
+                            </Button>
+                            <span className='text-sm mx-4'>Page {page} of {Math.ceil(total / limit)}</span>
+                            <Button
+                                className='text-sm bg-red-700 py-1'
+                                disabled={page * limit >= total}
+                                onClick={() => handlePageChange(page + 1)}>
+                                Next
+                            </Button>
+                        </div>
+                    </div>
+                    <table className='w-full border'>
+                        <thead>
+                            <tr className='border-b'>
+                                <th className="py-2 border text-sm px-5 text-left">Id</th>
+                                <th className="py-2 border text-sm px-5 text-left">Name</th>
+                                <th className="py-2 border text-sm px-5 text-left">Contact No</th>
+                                <th className="py-2 border text-sm px-5 text-left">IsActive</th>
+                                <th className="py-2 border text-sm px-5 text-right">#</th>
+                            </tr>
+                        </thead>
+                        <tbody className='overflow-y-scroll'>
+                            {users.slice(0,10).map((user, index) => (
+                                <tr className={`border-b ${user.isAdmin?"bg-green-500":""}`} key={index}>
+                                    <td className="py-2 border text-sm px-5">{index+1}</td>
+                                    <td className="py-2 border text-sm px-5">{user.firstName} {user.lastName}</td>
+                                    <td className="py-2 border text-sm px-5">{user.mobile}</td>
+                                    <td className="py-2 border text-sm px-5">{user.isActive}</td>                                 
+                                    <td className="py-2 border text-sm px-5 text-right">
+                                        
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
             
-            <RegisterModal
-                isOpen={openRegisterModal}
-                onChange={setRegisterModal}
-                modalWidth="60%"
-                height="350px"
-            />
+        <RegisterModal
+            isOpen={openRegisterModal}
+            onChange={setRegisterModal}
+            modalWidth="60%"
+            height="350px"
+            filterData={filterData}
+        />
     </div>
   )
 }

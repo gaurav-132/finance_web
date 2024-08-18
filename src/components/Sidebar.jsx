@@ -14,7 +14,7 @@ const iconMapping = {
 };
 
 const Sidebar = () => {
-    const [activeLink, setActiveLink] = useState('dashboard');
+    const [activeLink, setActiveLink] = useState('Dashboard');
 
     const handleClick = (link) => {
         setActiveLink(link);
