@@ -8,10 +8,14 @@ export const postData = async (url, data, dispatch) => {
         const response = await api.post(url, data);
         return response.data;
     } catch (error) {
-        if (error.message === 'token_expired' && error.status === 401) {
-            dispatch(logout());
+        if (error && error.message === 'token_expired') {
+            const userConfirmed = window.confirm("Session expired.");
+            if (userConfirmed) {
+                dispatch(logout());
+            }
         } else {
             throw new Error(error.response ? error.response.data : error.message);
         }
+
     }
 };

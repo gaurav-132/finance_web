@@ -25,22 +25,31 @@ const UpdateEmployeeDetailModal = ({
     
 
     const handleSubmit = (values, { setSubmitting }) => {
-        console.log(values);
+        console.log("Values", values);
+    
         const formData = new FormData();
+    
         Object.keys(values).forEach((key) => {
-            if (values[key] instanceof File) {
-                console.log(values[key])
-                formData.append(key, values[key]);
-            } else {
-                formData.append(key, values[key]);
+            // Check if the value is a File instance
+            if (values[key] && values[key] instanceof File) {
+                formData.append(key, values[key]); // Append the file
+            } else if (values[key]) {
+                formData.append(key, values[key]); // Append other field values
             }
         });
-
-      
-        submitDetails(formData);
+    
+        // Debug: log formData content
+        for (let pair of formData.entries()) {
+            console.log(`${pair[0]}, ${pair[1]}`);
+        }
+    
+        submitDetails(formData); // Send the form data
         setSubmitting(false);
         onChange(false);
-      };
+    };
+    
+    console.log(initialValues)
+
 
     return (
         <Modal

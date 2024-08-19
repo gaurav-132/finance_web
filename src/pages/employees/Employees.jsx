@@ -17,14 +17,14 @@ const Employees = () => {
     const [isemployeeDetailsModalOpen,setIsEmployeeDetailsModal] = useState(false);
     const [openAlertModal, setOpenAlertModal] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
-    const [loading, setLoading] = useState(false);
+    
     const [showFilter, setShowFilter] = useState(false);
     const { employees, total, limit, page, status, error, updateResponse } = useSelector((state) => state.employees);
     const [employee, setEmployee] = useState({});
     const filterData = {
-        total:0,
-        limit:10,
-        page:1,
+        total,
+        limit,
+        page,
         allocatedLocationId:0,
         employeeName:'',
     }
@@ -64,9 +64,9 @@ const Employees = () => {
         setInitialValues({
             empId: employee.id,
             name: employee.name,
-            markSheet: '',
-            check: '',
-            photo: '',
+            markSheet: employee.markSheet,
+            check: employee.check,
+            photo: employee.photo,
             aadhaarNo: employee.aadhaarNo || '',
             panNo: employee.panNo || '',
             allocatedLocationId: employee.allocatedLocationId,
@@ -129,7 +129,6 @@ const Employees = () => {
                                                 label="Employee Name"
                                                 as={InputBox}
                                             />
-                                            <ErrorMessage name="aadhaarNo" component="div" className='text-red-500 text-sm' />
                                         </div>
                                         <div className='mr-10'>
                                             <Field
@@ -140,7 +139,6 @@ const Employees = () => {
                                                 options={options}
                                                 placeholder="Select an option"
                                             />
-                                            <ErrorMessage name="allocatedLocationId" component="div" className='text-red-500 text-sm' />
                                         </div>
                                     </div>
                                     <div>
@@ -198,9 +196,9 @@ const Employees = () => {
                                 </tr>
                             </thead>
                             <tbody className='overflow-y-scroll'>
-                                {employees.slice(0,10).map((employee, index) => (
+                                {employees.map((employee, index) => (
                                     <tr className='border-b' key={index} >
-                                        <td className="py-1 border text-sm px-5">{index+1}</td>
+                                        <td className="py-1 border text-sm px-5">{((page - 1) * limit) + (index+1)}</td>
                                         <td className="py-1 border text-sm px-5 hover:cursor-pointer" onClick={() => showEmpDetails(employee)}>{employee.name}</td>
                                         <td className="py-1 border text-sm px-5">{employee.mobile}</td>
                                         <td className="py-1 border text-sm px-5">{employee.allocatedLocationId}</td>

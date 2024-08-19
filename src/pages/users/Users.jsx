@@ -165,7 +165,7 @@ function Users() {
                         <tbody className='overflow-y-scroll'>
                             {users.slice(0,10).map((user, index) => (
                                 <tr className={`border-b ${user.isAdmin?"bg-green-500":""}`} key={index}>
-                                    <td className="py-2 border text-sm px-5">{index+1}</td>
+                                    <td className="py-2 border text-sm px-5">{((page - 1) * limit) + (index+1)}</td>
                                     <td className="py-2 border text-sm px-5">{user.firstName} {user.lastName}</td>
                                     <td className="py-2 border text-sm px-5">{user.mobile}</td>
                                     <td className="py-2 border text-sm px-5">{user.isActive}</td>                                 
