@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllCustomers } from '../../app/slices/customerSlice';
 import Button from '../../components/Button';
+import Pagination from '../../components/Pagination';
 
 const Customers = () => {
     const dispatch = useDispatch();
@@ -21,11 +22,11 @@ const Customers = () => {
 
     const handlePageChange = (newPage) => {
         filterData.page = newPage;
-        dispatch(fetchAllEmployees(filterData));
+        dispatch(fetchAllCustomers(filterData));
     };
 
     const handleSubmit = (values, {setSubmitting}) => {
-        dispatch(fetchAllEmployees(values));
+        dispatch(fetchAllCustomers(values));
         setSubmitting(false); 
     }
 
@@ -37,7 +38,7 @@ const Customers = () => {
             allocatedLocationId:0,
             employeeName:'',
         };
-        dispatch(fetchAllEmployees(filterData));
+        dispatch(fetchAllCustomers(filterData));
         resetForm();
     }    
 
@@ -57,27 +58,13 @@ const Customers = () => {
                 }
                 {
                     status === 'succeeded' && customers.length > 0 && (
-                        <div>   
-                            <div className="pagination flex justify-between my-2 items-center">
-                                <div>
-                                    <p className='text-sm'>Total Customers: {total}</p>
-                                </div>
-                                <div className='text-right'>
-                                    <Button
-                                        disabled={page === 1}
-                                        className='text-sm bg-red-700 py-1'
-                                        onClick={() => handlePageChange(page - 1)}>
-                                        Previous
-                                    </Button>
-                                    <span className='text-sm mx-4'>Page {page} of {Math.ceil(total / limit)}</span>
-                                    <Button
-                                        className='text-sm bg-red-700 py-1'
-                                        disabled={page * limit >= total}
-                                        onClick={() => handlePageChange(page + 1)}>
-                                        Next
-                                    </Button>
-                                </div>
-                            </div>
+                        <div>
+                            <Pagination
+                                page={page}
+                                limit={limit}
+                                handlePageChange={handlePageChange}
+                                total={total}
+                            />
                             <table className='w-full border'>
                                 <thead>
                                     <tr className='border-b'>
