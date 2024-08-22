@@ -2,10 +2,11 @@ import React from 'react';
 import InputBox from '../../components/InputBox';
 import Button from '../../components/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage, connect } from 'formik';
 import { loginUser } from '../../app/slices/authSlice';
 import loginSchema from '../../schemas/loginSchema';
 import { useNavigate } from 'react-router-dom';
+import { Bounce, toast } from 'react-toastify';
 
 
 
@@ -13,22 +14,41 @@ const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleSubmit = (values, { setSubmitting }) => {
+    
+    const { message } = useSelector((state) => state.auth);
+
+    console.log(message);
+    
+    const handleSubmit = (values, { setSubmitting, setErrors }) => {
         dispatch(loginUser(values))
+            .unwrap() // Unwrap the promise to directly access the rejected value
             .then(() => {
                 navigate('/admin/dashboard');
+                toast.success("Logged in successfully", { position: "top-center" });
             })
             .catch((err) => {
-                console.error("Login failed", err);
+                // Log the error object to inspect its structure
+                console.log("Caught error in handleSubmit:", err);
+    
+                // Display the error message
+                toast.error(err.message || "Login failed", {
+                    position: "top-center",
+                    autoClose: 3000,
+                    theme: "light",
+                });
+    
+                // Optionally, set form errors using Formik's setErrors
+                setErrors({ submit: err.message });
             })
             .finally(() => {
                 setSubmitting(false);
-        });
+            });
     };
+    
 
 
     return (
-        <div className='flex items-center justify-center h-screen bg-gray-100'>
+        <div className='flex items-start pt-24 justify-center h-screen bg-gray-100'>
             <div className='bg-white p-8 rounded-lg shadow-md w-full max-w-md'>
                 <div className='text-center mb-6'>
                     <h2 className='text-2xl font-bold mb-2'>Sign In</h2>
