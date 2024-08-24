@@ -26,6 +26,7 @@ function Loans() {
         total,
         customerName:'',
         locationId:0,
+        loanStatus:0,
     }
 
     const [loanRequest, setLoanRequest] = useState({});
@@ -60,6 +61,7 @@ function Loans() {
             limit:10,
             page:1,
             customerName:'',
+            loanStatus:0
         };
         dispatch(fetchAllLoanRequests(filterData));
         resetForm();
@@ -88,10 +90,10 @@ function Loans() {
     ];
 
     const loanStatus = [
-        { value: 1, label: 'Pending' },
-        { value: 2, label: 'Active' },
-        { value: 3, label: 'Rejected' },
-        { value: 4, label: 'Completed' },
+        { value: 0, label: 'Pending' },
+        { value: 1, label: 'Active' },
+        { value: 2, label: 'Rejected' },
+        { value: 3, label: 'Completed' },
     ];
 
     return (
@@ -111,8 +113,8 @@ function Loans() {
                                 <div className='flex w-full'>
                                     <div className='mr-10'>
                                         <Field
-                                            id="status"
-                                            name="status"
+                                            id="loanStatus"
+                                            name="loanStatus"
                                             label="Select Loan Status"
                                             component={SelectBox}
                                             options={loanStatus}
