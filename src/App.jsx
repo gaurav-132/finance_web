@@ -13,6 +13,7 @@ import Todaysdata from './pages/todays/Todaysdata.jsx'
 import LoanRequests from './pages/loanrequests/LoanRequests.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import Users from './pages/users/Users.jsx'
+import Locations from './pages/locations/Locations.jsx'
 
 function App() {
     
@@ -37,6 +38,7 @@ function App() {
                         <Route path="requests" element={<ProtectedRoute isAuthenticated={isAuthenticated}><LoanRequests /></ProtectedRoute>} />
                         <Route path="salary" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Customers /></ProtectedRoute>} />
                         <Route path="users" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Users/></ProtectedRoute>} />
+                        <Route path="locations" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Locations/></ProtectedRoute>} />                        
                     </Route>
                 </Routes>
             </ErrorBoundary>
