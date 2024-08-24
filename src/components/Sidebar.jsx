@@ -35,7 +35,8 @@ const Sidebar = () => {
         {name: "Today's Data" , icon:'faCalendarWeek' , path:`/admin/todays`},
         {name: "Loan Requests" , icon:'faPersonCircleQuestion' , path:`/admin/requests`},
         {name: "Salary" , icon:'faCloud' , path:`/admin/salary`},
-        {name:"Users", icon:'faCloud',path:`/admin/users`}
+        {name:"Users", icon:'faCloud',path:`/admin/users`},
+        {name:"Locations", icon:'faCloud',path:`/admin/locations`}
     ];
 
     return (
