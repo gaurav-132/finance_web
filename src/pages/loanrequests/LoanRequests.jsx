@@ -9,13 +9,16 @@ import InputBox from '../../components/InputBox'
 import SelectBox from '../../components/SelectBox'
 import { dispatchAction, fetchAllLoanRequests } from '../../app/slices/loansSlice'
 import LoanActionModal from '../../components/LoanActionModal'
+import AlertModal from '../../components/AlertModal'
 
 function LoanRequests() {
 
     const dispatch = useDispatch();
     const [showFilter, setShowFilter] = useState(false);
-    const { loanRequests, page, limit, total, status } = useSelector((state) => state.loans);
+    const { loanRequests, page, limit, total, status, dispatchActionRes } = useSelector((state) => state.loans);
     const [openLoanReqModal, setOpenLoanReqModal] = useState(false);
+    const [openAlertModal, setOpenAlertModal] = useState(false);
+
     const filterData = {
         page,
         limit,
@@ -29,6 +32,14 @@ function LoanRequests() {
     useEffect(() => {
         dispatch(fetchAllLoanRequests(filterData));
     }, [dispatch])
+
+    useEffect(() => {
+        if(dispatchActionRes){
+            setOpenAlertModal(true);
+        }
+    });
+
+
 
     const handleSubmit = (values, {setSubmitting}) => {
         dispatch(fetchAllLoanRequests(values));
@@ -60,6 +71,11 @@ function LoanRequests() {
     const handleDispatchAction = (action) => {
         dispatch(dispatchAction(action))
         console.log(action);
+    }
+
+    const handleChangeAlert = () => {
+        console.log("Modal state:", openAlertModal);
+    setOpenAlertModal(false);
     }
 
     const options = [
@@ -190,7 +206,12 @@ function LoanRequests() {
             height="420px"
             handleDispatchAction={handleDispatchAction}
         />
-    </div>
+        {/* <AlertModal
+            isOpen={openAlertModal}
+            onChange={handleChangeAlert}
+            message={dispatchActionRes}
+        /> */}
+</div>
     )
 }
 

@@ -45,6 +45,7 @@ const loansSlice = createSlice({
         page:1,
         total:0,
         error: null,
+        dispatchActionRes:'',
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -79,6 +80,7 @@ const loansSlice = createSlice({
         })
         .addCase(dispatchAction.fulfilled, (state, action) => {
             state.status = 'succeeded';
+            state.dispatchActionRes = action.payload.message;
         })
         .addCase(dispatchAction.rejected, (state, action) => {
             state.status = 'failed';

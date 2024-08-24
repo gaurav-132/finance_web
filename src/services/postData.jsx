@@ -14,7 +14,7 @@ export const postData = async (url, data, dispatch) => {
                 dispatch(logout());
             }
         } else {
-            throw new Error(error.response ? error.response.data : error.message);
+            throw error;
         }
 
     }

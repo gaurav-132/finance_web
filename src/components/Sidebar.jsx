@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { faCloud, faDashboard, faHome , faNoteSticky,faCalendarWeek, faPersonCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faCloud, faDashboard, faHome , faNoteSticky,faCalendarWeek, faPersonCircleQuestion, faLocation, faLandmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const iconMapping = {
@@ -9,7 +9,8 @@ const iconMapping = {
     faDashboard: faDashboard,
     faNoteSticky:faNoteSticky,
     faCalendarWeek:faCalendarWeek,
-    faPersonCircleQuestion:faPersonCircleQuestion
+    faPersonCircleQuestion:faPersonCircleQuestion,
+    faLandmark: faLandmark,
 };
 
 const Sidebar = () => {
@@ -29,14 +30,14 @@ const Sidebar = () => {
 
     const links = [
         {name: "Dashboard" , icon:'faHome', path: '/admin/dashboard'},
+        {name:"Users", icon:'faCloud',path:`/admin/users`},
         {name: "Employees" , icon:'faCloud', path: '/admin/employees'},
         {name: "Customers" , icon:'faDashboard', path: '/admin/customers'},
         {name: "Loans" , icon:'faNoteSticky' , path:`/admin/loans`},
         {name: "Today's Data" , icon:'faCalendarWeek' , path:`/admin/todays`},
-        {name: "Loan Requests" , icon:'faPersonCircleQuestion' , path:`/admin/requests`},
         {name: "Salary" , icon:'faCloud' , path:`/admin/salary`},
+        {name:"Locations", icon:'faLandmark',path:`/admin/locations`},
         {name:"Users", icon:'faCloud',path:`/admin/users`},
-        {name:"Locations", icon:'faCloud',path:`/admin/locations`}
     ];
 
     return (

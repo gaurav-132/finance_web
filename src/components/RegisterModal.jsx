@@ -8,6 +8,7 @@ import { registerUser } from '../app/slices/authSlice';
 import registerSchema from '../schemas/registerSchema';
 import { useNavigate } from 'react-router-dom';
 import { fetchAllUsers } from '../app/slices/userSlice';
+import { toast } from 'react-toastify';
 
 const RegisterModal = ({ isOpen, modalWidth, onChange, height, filterData }) => {
     const dispatch = useDispatch();
@@ -15,13 +16,22 @@ const RegisterModal = ({ isOpen, modalWidth, onChange, height, filterData }) => 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
             console.log(values);
-            await dispatch(registerUser(values)).unwrap();
+            const response = await dispatch(registerUser(values)).unwrap();
             setSubmitting(false);
             
             onChange(false);
             dispatch(fetchAllUsers(filterData));
+            toast.success(response.message, {
+                position: "top-center",
+                autoClose: 3000,
+            });
         } catch (error) {   
-            console.log("error in register user", user);
+            toast.error(error.message || "An error occurred during registration", {
+                position: "top-center",
+                autoClose: 3000,
+            });
+    
+            setSubmitting(false);
         }
     };
 

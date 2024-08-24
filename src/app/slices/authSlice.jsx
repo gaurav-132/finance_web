@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { postData } from "../../services/postData";
 import { buildExtraReducers } from "../../utils/extraReducerHelper";
+import { Bounce, toast } from 'react-toastify';
+
 
 export const loginUser = createAsyncThunk(
     'auth/loginUser',
@@ -8,12 +10,20 @@ export const loginUser = createAsyncThunk(
         try {
             const response = await postData('/v1/auth/login', userData);
             localStorage.setItem('token', response.data.token);
+            console.log("login",response.message);
             return {
                 isAuthenticated: true,
-                token: response.data.token
+                token: response.data.token,
+                message: response.message
             };
         } catch (error) {
-            return thunkAPI.rejectWithValue(error.response.data);
+            const errorMessage = error.response?.data?.message;
+            const errorStatusCode = error.response?.data?.statusCode || 500;
+
+            return thunkAPI.rejectWithValue({
+                message: errorMessage,
+                statusCode: errorStatusCode,
+            });
         }
     }
 );
@@ -24,10 +34,13 @@ export const registerUser = createAsyncThunk(
         try {
             console.log(userData);
             const response = await postData('/v1/users/add-user', userData);
+            console.log("Res",response)
             return {
                 isAuthenticated: true,
+                message: response.message
             };
         } catch (error) {
+            console.log("register",error.response)
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
@@ -53,11 +66,13 @@ const authSlice = createSlice({
         ...initialState,
         error: null,
         status: 'idle',
+        message:'',
     },
     reducers: {
         logout: (state) => {
             state.isAuthenticated = false;
             state.token = null;
+            localStorage.removeItem('activeLink');
             localStorage.removeItem('token');
         },
         checkAuthentication: (state) => {
@@ -78,6 +93,7 @@ const authSlice = createSlice({
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.status = 'failed';
+                console.log("action",action)
                 state.error = action.payload;
             })
             .addCase(registerUser.pending, (state) => {
