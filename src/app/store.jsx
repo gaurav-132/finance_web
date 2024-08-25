@@ -4,6 +4,7 @@ import loansReducer from "./slices/loansSlice";
 import employeesReducer from './slices/employeeSlice';
 import usersReducer from './slices/userSlice';
 import customersReducer from './slices/customerSlice';
+import locationReducer from './slices/locationSlice';
 
 const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
         employees: employeesReducer,
         users :usersReducer,
         customers: customersReducer,
+        locations: locationReducer
     }
 });
 

@@ -1,8 +1,37 @@
-import React from 'react'
+
+import React, {useEffect, useState} from 'react';
+import CreateOrUpdateLocationModal from '../../components/CreateOrUpdateLocationModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllLocations } from '../../app/slices/locationSlice';
+import Pagination from '../../components/Pagination';
+import Button from '../../components/Button';
 
 function Locations() {  
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const dispatch = useDispatch();
+    const {locations, total, limit, page, status} = useSelector(state => state.locations);
+    const filterData = {
+        total,
+        limit,
+        page,
+        allocatedLocationId:0,
+        employeeName:'',
+    }
     
+
+    const handlePageChange = (newPage) => {
+        filterData.page = newPage;
+        dispatch(fetchAllLocations(filterData));
+    };
+
+    const changeModalStatus = () => {
+        setIsModalOpen(true);
+    }
+
+    useEffect(() => {
+        dispatch(fetchAllLocations(filterData));
+    }, [dispatch]);
+
 
     return (
         <div className="">
@@ -36,10 +65,10 @@ function Locations() {
                                     </tr>
                                 </thead>
                                 <tbody className='overflow-y-scroll'>
-                                    {locations.slice(0,10).map((customer, index) => (
+                                    {locations.slice(0,10).map((location, index) => (
                                         <tr className='border-b' key={index}>
                                             <td className="py-1 border text-sm px-5">{index+1}</td>
-                                            <td className="py-1 border text-sm px-5">{customer.firstNam}</td>
+                                            <td className="py-1 border text-sm px-5">{location.locationName}</td>
                                             <td className="py-1 border text-sm px-5 text-right">
                                                 <Button
                                                     type='submit'
@@ -57,6 +86,13 @@ function Locations() {
                         </div>)
                     }   
             </div>
+            <CreateOrUpdateLocationModal
+                isModalOpen={isModalOpen}
+                onChange={setIsModalOpen}
+                modalWidth="60%"
+                height="380px"
+                // submitDetails={handleSubmitDetails}
+            />
         </div>
     )
 }

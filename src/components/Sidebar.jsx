@@ -37,7 +37,6 @@ const Sidebar = () => {
         {name: "Today's Data" , icon:'faCalendarWeek' , path:`/admin/todays`},
         {name: "Salary" , icon:'faCloud' , path:`/admin/salary`},
         {name:"Locations", icon:'faLandmark',path:`/admin/locations`},
-        {name:"Users", icon:'faCloud',path:`/admin/users`},
     ];
 
     return (
