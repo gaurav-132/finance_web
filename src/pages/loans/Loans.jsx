@@ -11,6 +11,7 @@ import { dispatchAction, fetchAllLoanRequests } from '../../app/slices/loansSlic
 import LoanActionModal from '../../components/LoanActionModal'
 import AlertModal from '../../components/AlertModal'
 import { Bounce, toast } from 'react-toastify';
+import { fetchAllLocations } from '../../app/slices/locationSlice'
 
 
 function Loans() {
@@ -19,6 +20,7 @@ function Loans() {
     const [showFilter, setShowFilter] = useState(false);
     const { loanRequests, page, limit, total, status, dispatchActionRes } = useSelector((state) => state.loans);
     const [openLoanReqModal, setOpenLoanReqModal] = useState(false);
+    const {locations} = useSelector(state=>state.locations);
 
     const filterData = {
         page,
@@ -33,6 +35,7 @@ function Loans() {
 
     useEffect(() => {
         dispatch(fetchAllLoanRequests(filterData));
+        dispatch(fetchAllLocations());
     }, [dispatch])
 
     useEffect(() => {
@@ -84,11 +87,11 @@ function Loans() {
     }
 
 
-    const options = [
-        { value: '1', label: 'Haridwar' },
-        { value: '2', label: 'Roorkee' },
-    ];
-
+    const options = locations.map((item) => ({
+        value: item.id,
+        label: item.locationName,
+      }));
+      
     const loanStatus = [
         { value: 0, label: 'Pending' },
         { value: 1, label: 'Active' },

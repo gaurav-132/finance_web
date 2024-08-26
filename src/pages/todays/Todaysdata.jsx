@@ -7,12 +7,14 @@ import SelectBox from '../../components/SelectBox';
 import Button from '../../components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllEmployees } from '../../app/slices/employeeSlice';
+import { fetchAllLocations } from '../../app/slices/locationSlice';
 
 function Todaysdata() {
     
 
     const dispatch = useDispatch();
     const { employees, total, limit, page, status, error, updateResponse } = useSelector((state) => state.employees);
+    const {locations} = useSelector(state=>state.locations);
 
    
     const [showFilter, setShowFilter] = useState(false);
@@ -25,6 +27,7 @@ function Todaysdata() {
     }
     useEffect(() => {
         dispatch(fetchAllEmployees(filterData));
+        dispatch(fetchAllLocations());
     }, [dispatch]);
 
     const handlePageChange = (newPage) => {
@@ -37,10 +40,10 @@ function Todaysdata() {
         setSubmitting(false); 
     }
 
-    const options = [
-        { value: '1', label: 'Haridwar' },
-        { value: '2', label: 'Roorkee' },
-    ];
+    const options = locations.map((item) => ({
+        value: item.id,
+        label: item.locationName,
+      }));
 
     const clearData = (resetForm) => {
         const filterData = {
