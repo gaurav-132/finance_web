@@ -21,7 +21,7 @@ const Login = () => {
     
     const handleSubmit = (values, { setSubmitting, setErrors }) => {
         dispatch(loginUser(values))
-            .unwrap() // Unwrap the promise to directly access the rejected value
+            .unwrap() 
             .then(() => {
                 navigate('/admin/dashboard');
                 toast.success("Logged in successfully", { position: "top-center" });

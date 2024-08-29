@@ -12,10 +12,10 @@ const Customers = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [openAlertModal, setOpenAlertModal] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
-    const {customers} = useSelector((state) => state.customers.customers);
     const{ status, total, page, limit}= useSelector((state)=>state.customers);
     const [showFilter, setShowFilter] = useState(false);
     
+    const {customers} = useSelector((state) => state.customers);
     
     const filterData = {
         total:0,
@@ -107,11 +107,11 @@ const Customers = () => {
                     <div className='border px-2 py-2 rounded text-sm font-bold text-white bg-yellow-400'>Loading...</div>
                 }
                 {
-                    status === 'succeeded' && customers.length === 0 && 
+                    status === 'succeeded' && customers?.length === 0 && 
                     <div className='border my-2 px-2 py-2 rounded text-sm font-bold text-white bg-red-600'>No Employees Found</div>
                 }
                 {
-                    status === 'succeeded' && customers.length > 0 && (
+                    status === 'succeeded' && customers?.length > 0 && (
                         <div>
                             <Pagination
                                 page={page}
