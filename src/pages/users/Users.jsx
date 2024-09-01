@@ -178,8 +178,7 @@ function Users() {
                     </table>
                 </div>
             )}
-        </div>
-            
+        </div>            
         <RegisterModal
             isOpen={openRegisterModal}
             onChange={setRegisterModal}

@@ -6,7 +6,20 @@ export const fetchAllLocations = createAsyncThunk(
     'locations/fetchAllLocations',
     async (filterData,thunkAPI) => {
         try {
-            const response = await postData('/v1/locations/get-locations', filterData, thunkAPI.dispatch);
+            const response = await postData('/v1/locations/get-locations', filterData);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const createOrUpdateLocation = createAsyncThunk(
+    'locations/createOrUpdateLocation',
+    async (locationData, thunkAPI) => {
+        try {
+            console.log(locationData);
+            const response = await postData('/v1/locations/add-location', locationData);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -42,6 +55,16 @@ const locationSlice = createSlice({
             state.status = 'failed';
             state.error = action.error.message;
         })
+        .addCase(createOrUpdateLocation.pending, (state) => {
+            state.status = 'loading'
+        })
+        .addCase(createOrUpdateLocation.fulfilled, (state) => {
+            state.status = 'succeeded';
+        })
+        .addCase(createOrUpdateLocation.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.payload;
+        });
 
     },
 });

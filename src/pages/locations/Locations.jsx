@@ -7,7 +7,7 @@ import Pagination from '../../components/Pagination';
 import Button from '../../components/Button';
 
 function Locations() {  
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [addLocationModalStatus, setAddLocationModalStatus] = useState(false);
     const dispatch = useDispatch();
     const {locations, total, limit, page, status} = useSelector(state => state.locations);
     const filterData = {
@@ -28,6 +28,10 @@ function Locations() {
         setIsModalOpen(true);
     }
 
+    const changeAddLocationModalStatus = () => {
+        setAddLocationModalStatus(true);
+    }
+
     useEffect(() => {
         dispatch(fetchAllLocations(filterData));
     }, [dispatch]);
@@ -35,8 +39,15 @@ function Locations() {
 
     return (
         <div className="">
-            <div className='bg-[#373737] rounded-md px-2 py-4'>
+            <div className='bg-[#373737] rounded-md px-2 py-4 flex justify-between items-center'>
                 <h2 className='text-white font-bold'>Locations</h2>
+                <Button
+                className='bg-blue-600 text-white focus:ring-0 focus:outline-none py-1 px-4 font-semibold'
+                onClick={() => {changeAddLocationModalStatus()} 
+                }
+                >
+                    Add Location
+                </Button>                
             </div>
             <div className=''>
                 {
@@ -87,8 +98,8 @@ function Locations() {
                     }   
             </div>
             <CreateOrUpdateLocationModal
-                isModalOpen={isModalOpen}
-                onChange={setIsModalOpen}
+                isModalOpen={addLocationModalStatus}
+                onChange={setAddLocationModalStatus}
                 modalWidth="60%"
                 height="380px"
                 // submitDetails={handleSubmitDetails}
