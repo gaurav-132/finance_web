@@ -3,13 +3,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllCustomers } from '../../app/slices/customerSlice';
 import Button from '../../components/Button';
 import Pagination from '../../components/Pagination';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import InputBox from '../../components/InputBox';
 
 const Customers = () => {
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [openAlertModal, setOpenAlertModal] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
-    const {customers, status, total, page, limit} = useSelector((state) => state.customers);
+    const{ status, total, page, limit}= useSelector((state)=>state.customers);
+    const [showFilter, setShowFilter] = useState(false);
+    
+    const {customers} = useSelector((state) => state.customers);
+    
     const filterData = {
         total:0,
         limit:10,
@@ -43,21 +50,68 @@ const Customers = () => {
     }    
 
     return (
-        <div className="">
-            <div className='bg-[#373737] rounded-md px-2 py-4'>
+        <div className="h-full">
+            <div className='bg-[#373737] rounded-md px-2 py-4 justify-between items-center'>
                 <h2 className='text-white font-bold'>Customers</h2>
             </div>
             <div className=''>
+            <div className='relative' style={{ paddingBottom: showFilter ? '0px' : 60 }}>
+                <div className="mt-4" style={{ display: showFilter ? 'flex' : 'none' }}>
+                    <Formik
+                        initialValues={filterData}
+                        onSubmit={handleSubmit}
+                    >
+                        {({ isSubmitting, resetForm }) => (
+                            <Form className=''>
+                                <div className='flex w-full'>
+                                    <div className='mr-10'>
+                                        <Field
+                                            id="name"
+                                            name="name"
+                                            type="text"
+                                            label="User Name"
+                                            as={InputBox}
+                                        />
+                                        <ErrorMessage name="aadhaarNo" component="div" className='text-red-500 text-sm' />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className='mr-10 mt-3'>
+                                        <Button
+                                            type='submit'
+                                            disabled={isSubmitting}
+                                            className='bg-blue-600 text-white focus:ring-0 focus:outline-none w-auto py-1 mr-4 font-semibold'
+                                        >
+                                            {isSubmitting ? 'Searching...' : 'Search'}
+                                        </Button>
+                                        <Button
+                                            type='submit'
+                                            disabled={isSubmitting}
+                                            onClick={() => clearData(resetForm)}
+                                            className='bg-red-600 text-white focus:ring-0 focus:outline-none w-auto py-1 mr-4 font-semibold'
+                                        >
+                                            Clear
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
+                </div>
+                <div className='absolute top-0 right-0' style={{ marginTop: showFilter ? '0px' : '16px' }}>
+                    <FontAwesomeIcon onClick={() => setShowFilter(!showFilter)} className='text-xl' icon="fa-solid fa-filter" />
+                </div>
+            </div>
                 {
                     status === 'pending' && 
                     <div className='border px-2 py-2 rounded text-sm font-bold text-white bg-yellow-400'>Loading...</div>
                 }
                 {
-                    status === 'succeeded' && customers.length === 0 && 
+                    status === 'succeeded' && customers?.length === 0 && 
                     <div className='border my-2 px-2 py-2 rounded text-sm font-bold text-white bg-red-600'>No Employees Found</div>
                 }
                 {
-                    status === 'succeeded' && customers.length > 0 && (
+                    status === 'succeeded' && customers?.length > 0 && (
                         <div>
                             <Pagination
                                 page={page}
@@ -87,14 +141,14 @@ const Customers = () => {
                                             <td className="py-1 border text-sm px-5">{customer.aadhaarNumber}</td>
                                             <td className="py-1 border text-sm px-5">{customer.panNumber}</td>
                                             <td className="py-1 border text-sm px-5 text-right">
-                                                <Button
+                                                {/* <Button
                                                     type='submit'
                                                     disabled={false}
-                                                    onClick={() => changeModalStatus(employee)}
+                                                    // onClick={() => changeModalStatus(employee)}
                                                     className='bg-[#F44336] py-1 text-white focus:ring-0 focus:outline-none w-full font-semibold'
                                                 >
                                                     Edit
-                                                </Button>
+                                                </Button> */}
                                             </td>
                                         </tr>
                                     ))}

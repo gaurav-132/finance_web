@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import EmployeeDetailsModal from '../../components/EmployeeDetailsModal';
 import UpdateEmployeeDetailModal from '../../components/UpdateEmployeeDetailModal';
 import Pagination from '../../components/Pagination';
+import { fetchAllLocations } from '../../app/slices/locationSlice';
 
 const Employees = () => {
     const dispatch = useDispatch();
@@ -20,6 +21,8 @@ const Employees = () => {
     
     const [showFilter, setShowFilter] = useState(false);
     const { employees, total, limit, page, status, error, updateResponse } = useSelector((state) => state.employees);
+    const {locations} = useSelector(state=>state.locations);
+
     const [employee, setEmployee] = useState({});
     const filterData = {
         total,
@@ -44,6 +47,7 @@ const Employees = () => {
 
     useEffect(() => {
         dispatch(fetchAllEmployees(filterData));
+        dispatch(fetchAllLocations());
     }, [dispatch]);
 
     useEffect(() => {
@@ -83,11 +87,12 @@ const Employees = () => {
     const handleSubmitDetails =  (formData) => {
         dispatch(updateEmployee(formData));
     };
+    
 
-    const options = [
-        { value: '1', label: 'Haridwar' },
-        { value: '2', label: 'Roorkee' },
-    ];
+    const options = locations.map((item) => ({
+        value: item.id,
+        label: item.locationName,
+      }));
 
     const handleSubmit = (values, {setSubmitting}) => {
         dispatch(fetchAllEmployees(values));
@@ -108,7 +113,7 @@ const Employees = () => {
 
     return (
         <div className="">
-            <div className='bg-[#373737] rounded-md px-2 py-3'>
+            <div className='bg-[#373737] rounded-md px-2 py-4'>
                 <h2 className='text-white font-bold'>Employees</h2>
             </div>
             <div >

@@ -40,7 +40,7 @@ const EmployeeDetailsModal = ({
                         </div>
 
                     </div>
-                    {/* <div className='flex gap-8 my-4'>
+                    <div className='flex gap-8 my-4'>
                         <div className="flex flex-col p-7 bg-clip-border rounded-xl bg-white text-gray-700 border border-blue-gray-100 shadow-sm justify-between">
                             <p className="text-xl">Total Loan Amount:</p>
                             <p className="text-2xl">{employee.totalAmount}</p>
@@ -49,9 +49,9 @@ const EmployeeDetailsModal = ({
                             <p className="text-xl">Total Loans:</p>
                             <p className="text-2xl">{employee.totalLoans}</p>
                         </div>
-                    </div> */}
+                    </div>
                 </div>
-                {/* <div className="flex gap-8">
+                <div className="flex gap-8">
                     <div className="w-2/4 m-3">
                         <h2>Collection:</h2>
                         <Heatmap />
@@ -60,7 +60,7 @@ const EmployeeDetailsModal = ({
                         <h2>Salary:</h2>
                         <Heatmap />
                     </div>
-                </div> */}
+                </div>
             </div>
         </Modal>
     );

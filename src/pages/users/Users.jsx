@@ -27,6 +27,7 @@ function Users() {
         page:1,
         name:'',
     });
+    console.log(users);
     
     const [initialValues, setInitialValues] = useState({
         userId: "",
