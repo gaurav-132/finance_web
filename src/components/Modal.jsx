@@ -14,12 +14,18 @@ const Modal = ({
     top,
     height
 }) => {
+    const handleOpenChange = (open) => {
+        // Only allow closing when explicitly setting isOpen to false
+        if (!open && isOpen) {
+            return; // Prevent closing on overlay click or escape key press
+        }
+        onChange(open);
+    };
+
     return (
         <Dialog.Root
             open={isOpen}
-            defaultOpen={isOpen}
-            onOpenChange={onChange}
-            className={`z-[9999] w-[${modalWidth}]`}
+            onOpenChange={handleOpenChange}
         >
             <Dialog.Portal>
                 <Dialog.Overlay
@@ -27,12 +33,12 @@ const Modal = ({
                         backdrop-blur-sm
                         fixed
                         inset-0
-                        z-[9998]  // Increase z-index for the overlay
+                        z-[9998]
                     '
-                >
-                    <Dialog.Content
-                        style={{ width: `${modalWidth}`, minHeight: `${minHeight}`, top: `${top}`, height: `${height}`}}
-                        className='
+                />
+                <Dialog.Content
+                    style={{ width: `${modalWidth}`, minHeight: `${minHeight}`, top: `${top}`, height: `${height}`}}
+                    className='
                         fixed
                         drop-shadow-sm
                         border
@@ -45,30 +51,28 @@ const Modal = ({
                         rounded-md
                         bg-white
                         focus:outline-none
-                        z-[9999]  // Increase z-index for the content
+                        z-[9999]
                     '
-                    >
-                        <Dialog.Title className={clsx(
+                >
+                    <Dialog.Title className={clsx(
                         'text-lg px-4 text-left font-bold',
-                        title ? 'py-2' : 'py-4' // Apply 'py-2' if title is provided, otherwise 'py-4'
+                        title ? 'py-2' : 'py-4'
                     )}>
-                            {title}
-                        </Dialog.Title>
-
-                        <hr/>
-                        <Dialog.Description className='mb-5 text-sm leading-normal text-center'>
-                            {description}
-                        </Dialog.Description>
-                        <div className='mb-5'>
-                            {children}
-                        </div>
-                        <Dialog.Close asChild>
-                            <button onClick={() => onChange(false)}  className='text-neutral-400 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none justify-center rounded-full focus:outline-none'>
-                                <IoMdClose />
-                            </button>
-                        </Dialog.Close>
-                    </Dialog.Content>
-                </Dialog.Overlay>
+                        {title}
+                    </Dialog.Title>
+                    <hr/>
+                    <Dialog.Description className='mb-5 text-sm leading-normal text-center'>
+                        {description}
+                    </Dialog.Description>
+                    <div className='mb-5'>
+                        {children}
+                    </div>
+                    <Dialog.Close asChild>
+                        <button onClick={() => onChange(false)} className='text-neutral-400 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none justify-center rounded-full focus:outline-none'>
+                            <IoMdClose />
+                        </button>
+                    </Dialog.Close>
+                </Dialog.Content>
             </Dialog.Portal>
         </Dialog.Root>
     );

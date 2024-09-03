@@ -9,7 +9,6 @@ import InputBox from '../../components/InputBox'
 import SelectBox from '../../components/SelectBox'
 import { dispatchAction, fetchAllLoanRequests } from '../../app/slices/loansSlice'
 import LoanActionModal from '../../components/LoanActionModal'
-import AlertModal from '../../components/AlertModal'
 
 function LoanRequests() {
 

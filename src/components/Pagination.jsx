@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import Button from './Button'
 
 const Pagination = ({
@@ -7,6 +7,9 @@ const Pagination = ({
     handlePageChange,
     limit
 }) => {
+
+    console.log("Pagination rendered")
+
     return (
         <div className="pagination flex justify-between my-2 items-center">
             <div>
@@ -31,4 +34,4 @@ const Pagination = ({
     )
 }
 
-export default Pagination   
+export default memo(Pagination)   

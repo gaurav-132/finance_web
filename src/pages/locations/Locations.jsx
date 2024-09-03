@@ -85,7 +85,7 @@ function Locations() {
                                                     type='submit'
                                                     disabled={false}
                                                     onClick={() => changeModalStatus(employee)}
-                                                    className='bg-[#F44336] py-1 text-white focus:ring-0 focus:outline-none w-full font-semibold'
+                                                    className='bg-[#F44336] py-1 text-white focus:ring-0 focus:outline-none  font-semibold'
                                                 >
                                                     Edit
                                                 </Button>
@@ -100,8 +100,8 @@ function Locations() {
             <CreateOrUpdateLocationModal
                 isModalOpen={addLocationModalStatus}
                 onChange={setAddLocationModalStatus}
-                modalWidth="60%"
-                height="380px"
+                modalWidth="40%"
+                height="250px"
                 // submitDetails={handleSubmitDetails}
             />
         </div>

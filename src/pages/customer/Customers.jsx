@@ -10,7 +10,6 @@ import InputBox from '../../components/InputBox';
 const Customers = () => {
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [openAlertModal, setOpenAlertModal] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const{ status, total, page, limit}= useSelector((state)=>state.customers);
     const [showFilter, setShowFilter] = useState(false);
