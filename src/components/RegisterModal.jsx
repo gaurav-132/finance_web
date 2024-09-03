@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 
 const RegisterModal = ({ isOpen, modalWidth, onChange, height, filterData }) => {
     const dispatch = useDispatch();
-
+    console.log("Redring register modal")
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
             console.log(values);

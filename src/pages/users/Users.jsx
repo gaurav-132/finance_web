@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react'
+import React, { useCallback, useEffect,useMemo,useState } from 'react'
 import Button from '../../components/Button'
 import { fetchAllUsers } from '../../app/slices/userSlice'
 import { useSelector,useDispatch } from 'react-redux'
@@ -6,28 +6,28 @@ import { Formik,Form,Field,ErrorMessage } from 'formik'
 import InputBox from '../../components/InputBox'
 import SelectBox from '../../components/SelectBox'
 import RegisterModal from '../../components/RegisterModal'
-import AlertModal from '../../components/AlertModal'
 import EmployeeDetailModal from '../../components/UpdateEmployeeDetailModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Pagination from '../../components/Pagination'
 
 function Users() {
-
+    console.log("user rendring")
     const dispatch = useDispatch();
-    const [isModalOpen , setIsModalOpen] = useState(false);
-    const [openAlertModal, setOpenAlertModal] = useState(false);
     const [openRegisterModal,setRegisterModal] = useState(false)
-    const [alertMessage, setAlertMessage] = useState('');
     const [showFilter, setShowFilter] = useState(false);
 
     const {users ,total,limit,page ,status,error,updateResponse} = useSelector((state) => state.users)
-    const [filterData, setFilterData] = useState({
+
+    const initialFilterData = useMemo(() => ({
         total:0,
         limit:10,
         page:1,
         name:'',
-    });
-    console.log(users);
+    }));
+    
+    const [filterData, setFilterData] = useState(initialFilterData);
+
+    
     
     const [initialValues, setInitialValues] = useState({
         userId: "",
@@ -38,12 +38,10 @@ function Users() {
 
     useEffect(() => {
         dispatch(fetchAllUsers(filterData));
-    }, [dispatch]);
+    }, [dispatch, filterData]);
 
     useEffect(() => {
         if (updateResponse) {
-            setAlertMessage(updateResponse);
-            setOpenAlertModal(true);
             dispatch(fetchAllUsers());
         }
     }, [updateResponse, dispatch]);
@@ -53,28 +51,21 @@ function Users() {
         setRegisterModal(true);
     } 
    
-    const handlePageChange = (newPage) => {
-        filterData.page = newPage;
+    const handlePageChange = useCallback((newPage) => {
+        setFilterData((prev) => ({ ...prev, page: newPage }));
         dispatch(fetchAllUsers(filterData));
-    };
+    },[]);
 
 
-    const handleSubmit = (values, { setSubmitting }) => {
+    const handleSubmit = useCallback((values, { setSubmitting }) => {
         dispatch(fetchAllUsers(values));
         setSubmitting(false)
-    };
+    },[]);
 
-    const clearData = (resetForm) => {
-        const filterData = {
-            total:0,
-            limit:10,
-            page:1,
-            allocatedLocationId:0,
-            employeeName:'',
-        };
-        dispatch(fetchAllUsers(filterData));
+    const clearData = useCallback((resetForm) => {
+        setFilterData(initialFilterData);
         resetForm();
-    }
+      }, [initialFilterData]);
 
     return (
     <div className="h-full">

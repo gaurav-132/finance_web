@@ -105,8 +105,8 @@ function Locations() {
                 isModalOpen={addLocationModalStatus}
                 location={locationObject}
                 onChange={setAddLocationModalStatus}
-                modalWidth="60%"
-                height="380px"
+                modalWidth="40%"
+                height="250px"
                 // submitDetails={handleSubmitDetails}
             />
         </div>

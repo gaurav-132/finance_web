@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import Modal from './Modal';
-import Heatmap from './Heatmap';
 
 const EmployeeDetailsModal = ({
         employee, 
         isOpen, 
         onChange 
     }) => {
+        
+    console.log("Employee Details rendered")
 
     return (
         <Modal
@@ -38,27 +39,6 @@ const EmployeeDetailsModal = ({
                                 <p className="text-[16px] mb-1">Pan No: <span className='text-gray-500 text-[15px]'>{employee.panNo}</span></p>
                             </div>
                         </div>
-
-                    </div>
-                    <div className='flex gap-8 my-4'>
-                        <div className="flex flex-col p-7 bg-clip-border rounded-xl bg-white text-gray-700 border border-blue-gray-100 shadow-sm justify-between">
-                            <p className="text-xl">Total Loan Amount:</p>
-                            <p className="text-2xl">{employee.totalAmount}</p>
-                        </div>
-                        <div className="flex flex-col p-7 bg-clip-border rounded-xl bg-white text-gray-700 border border-blue-gray-100 shadow-sm justify-between">
-                            <p className="text-xl">Total Loans:</p>
-                            <p className="text-2xl">{employee.totalLoans}</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex gap-8">
-                    <div className="w-2/4 m-3">
-                        <h2>Collection:</h2>
-                        <Heatmap />
-                    </div>
-                    <div className="w-2/4 m-3">
-                        <h2>Salary:</h2>
-                        <Heatmap />
                     </div>
                 </div>
             </div>
@@ -66,4 +46,4 @@ const EmployeeDetailsModal = ({
     );
 };
 
-export default EmployeeDetailsModal;
+export default memo(EmployeeDetailsModal);
