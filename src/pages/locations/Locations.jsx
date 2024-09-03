@@ -8,6 +8,7 @@ import Button from '../../components/Button';
 
 function Locations() {  
     const [addLocationModalStatus, setAddLocationModalStatus] = useState(false);
+    const [locationObject, setLocationObject] = useState({id: 0, locationName: ''});
     const dispatch = useDispatch();
     const {locations, total, limit, page, status} = useSelector(state => state.locations);
     const filterData = {
@@ -24,11 +25,14 @@ function Locations() {
         dispatch(fetchAllLocations(filterData));
     };
 
-    const changeModalStatus = () => {
-        setIsModalOpen(true);
+    const changeModalStatus = (location) => {
+        setLocationObject(location);
+        console.log(locationObject);
+        setAddLocationModalStatus(true);
     }
 
     const changeAddLocationModalStatus = () => {
+        setLocationObject({id: 0, locationName: ''});
         setAddLocationModalStatus(true);
     }
 
@@ -51,7 +55,7 @@ function Locations() {
             </div>
             <div className=''>
                 {
-                    status === 'pending' && 
+                    status === 'loading' && 
                     <div className='border px-2 py-2 rounded text-sm font-bold text-white bg-yellow-400'>Loading...</div>
                 }
                 {
@@ -84,7 +88,7 @@ function Locations() {
                                                 <Button
                                                     type='submit'
                                                     disabled={false}
-                                                    onClick={() => changeModalStatus(employee)}
+                                                    onClick={() => changeModalStatus(location)}
                                                     className='bg-[#F44336] py-1 text-white focus:ring-0 focus:outline-none w-full font-semibold'
                                                 >
                                                     Edit
@@ -99,6 +103,7 @@ function Locations() {
             </div>
             <CreateOrUpdateLocationModal
                 isModalOpen={addLocationModalStatus}
+                location={locationObject}
                 onChange={setAddLocationModalStatus}
                 modalWidth="60%"
                 height="380px"

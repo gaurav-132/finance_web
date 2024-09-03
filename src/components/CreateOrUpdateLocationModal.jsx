@@ -13,10 +13,11 @@ function CreateOrUpdateLocationModal({
     onChange,
     modalWidth,
     height,
-    submitDetails
+    submitDetails,
+	location
 }) {
 	const dispatch = useDispatch();
-
+	// console.log(location);
   const handleSubmit = async (values, {setSubmitting}) => {
 	try {
 		const response = await dispatch(createOrUpdateLocation(values)).unwrap();
@@ -48,7 +49,8 @@ function CreateOrUpdateLocationModal({
     >
       <Formik
         initialValues={{
-          locationName: ''
+			id: location.id,
+            locationName: location.locationName
         }}
         validationSchema={addLocationSchema}
         onSubmit={handleSubmit}

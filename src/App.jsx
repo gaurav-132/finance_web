@@ -25,7 +25,6 @@ function App() {
                 <Routes>
                     <Route path="/admin/login" element={!isAuthenticated ? <Login /> : <Navigate to='/admin/dashboard' />} />
                    
-
                     <Route path="admin" element={<Navigate to={isAuthenticated ? '/admin/dashboard' : '/admin/login'} />} />
                     
                     <Route path="admin/*" element={<ProtectedRoute isAuthenticated={isAuthenticated}><AdminLayout /></ProtectedRoute>}>

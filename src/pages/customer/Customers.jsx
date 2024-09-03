@@ -12,10 +12,10 @@ const Customers = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [openAlertModal, setOpenAlertModal] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
-    const{ status, total, page, limit}= useSelector((state)=>state.customers);
+    const{ status, total, page, limit, customers}= useSelector((state)=>state.customers);
     const [showFilter, setShowFilter] = useState(false);
     
-    const {customers} = useSelector((state) => state.customers);
+    // const {customers} = useSelector((state) => state.customers);
     
     const filterData = {
         total:0,
