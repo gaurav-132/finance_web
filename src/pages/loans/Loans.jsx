@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import LoanRequestsCard from '../../components/LoanRequestsCard'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import Button from '../../components/Button'
@@ -16,19 +16,20 @@ import { fetchAllLocations } from '../../app/slices/locationSlice'
 function Loans() {
 
     const dispatch = useDispatch();
-    const [showFilter, setShowFilter] = useState(false);
+    const [showFilter, setShowFilter] = useState(true);
     const { loanRequests, page, limit, total, status, dispatchActionRes } = useSelector((state) => state.loans);
     const [openLoanReqModal, setOpenLoanReqModal] = useState(false);
     const {locations} = useSelector(state=>state.locations);
 
-    const filterData = {
+    const filterData = useMemo(() => ({
         page,
         limit,
         total,
-        customerName:'',
-        locationId:0,
-        loanStatus:0,
-    }
+        customerName: '',
+        locationId: 0,
+        loanStatus: 0,
+    }), [page, limit, total]);
+    
 
     const [loanRequest, setLoanRequest] = useState({});
 
@@ -199,23 +200,37 @@ function Loans() {
                             </tr>
                         </thead>
                         <tbody className='overflow-y-scroll'>
-                            {loanRequests.map((loanReq, index) => (
+                            {loanRequests.map((loan, index) => (
                                 <tr className='border-b' key={index} >
                                     <td className="py-1 border text-sm px-5">{((page - 1) * limit) + (index+1)}</td>
-                                    <td className="py-1 border text-sm px-5">{loanReq.firstName + loanReq.lastName}</td>
-                                    <td className="py-1 border text-sm px-5">{loanReq.aadhaarNumber}</td>
-                                    <td className="py-1 border text-sm px-5">{loanReq.panNumber}</td>
-                                    <td className="py-1 border text-sm px-5">{loanReq.workLocation}</td>
-                                    <td className="py-1 border text-sm px-5">{loanReq.loanAmount}</td>
+                                    <td className="py-1 border text-sm px-5">{loan.firstName + loan.lastName}</td>
+                                    <td className="py-1 border text-sm px-5">{loan.aadhaarNumber}</td>
+                                    <td className="py-1 border text-sm px-5">{loan.panNumber}</td>
+                                    <td className="py-1 border text-sm px-5">{loan.workLocation}</td>
+                                    <td className="py-1 border text-sm px-5">{loan.loanAmount}</td>
                                     <td className="py-1 border text-sm px-5 text-right">
-                                        <Button
-                                            type='submit'
-                                            disabled={false}
-                                            onClick={() => changeModalStatus(loanReq)}
-                                            className='bg-blue-500 py-1 text-white focus:ring-0 focus:outline-none w-full font-semibold'
-                                        >
-                                            Action
-                                        </Button>
+                                        {
+                                            loan.status === 0 && 
+                                            <Button
+                                                type='submit'
+                                                disabled={false}
+                                                onClick={() => changeModalStatus(loan)}
+                                                className='bg-blue-500 py-1 text-white focus:ring-0 focus:outline-none w-full font-semibold'
+                                            >
+                                                Action
+                                            </Button>
+                                        }
+                                        {
+                                            loan.status === 1 && 
+                                            <Button
+                                                type='submit'
+                                                disabled={false}
+                                                onClick={() => showDetailModal(loan)}
+                                                className='bg-blue-500 py-1 text-white focus:ring-0 focus:outline-none w-full font-semibold'
+                                            >
+                                                View
+                                            </Button>
+                                        }
                                     </td>
                                 </tr>
                             ))}

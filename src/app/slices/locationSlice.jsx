@@ -20,6 +20,7 @@ export const createOrUpdateLocation = createAsyncThunk(
         try {
             console.log(locationData);
             const response = await postData('/v1/locations/add-location', locationData);
+            console.log("response by redux", response);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -59,7 +60,7 @@ const locationSlice = createSlice({
             state.status = 'loading'
         })
         .addCase(createOrUpdateLocation.fulfilled, (state) => {
-            state.status = 'succeeded';
+            state.status = 'succeeded'; 
         })
         .addCase(createOrUpdateLocation.rejected, (state, action) => {
             state.status = 'failed';

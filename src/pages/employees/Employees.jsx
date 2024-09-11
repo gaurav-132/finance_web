@@ -182,11 +182,13 @@ const Employees = () => {
                         />
                     </div>
                 </div>
+
                 {status === 'pending' && (
                     <div className='border px-2 py-2 rounded text-sm font-bold text-white bg-yellow-400'>
                         Loading...
                     </div>
                 )}
+
                 {status === 'succeeded' && employees.length === 0 && (
                     <div className='border my-2 px-2 py-2 rounded text-sm font-bold text-white bg-red-600'>
                         No Employees Found

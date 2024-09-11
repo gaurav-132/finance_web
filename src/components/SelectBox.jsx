@@ -29,7 +29,7 @@ const SelectBox = ({
                     border-gray-300 
                     rounded-md 
                     shadow-sm 
-                    sm:text-sm
+                sm:text-sm
                 "
             >
                 <option value="">{placeholder}</option>

@@ -4,12 +4,10 @@ import { fetchAllUsers } from '../../app/slices/userSlice'
 import { useSelector,useDispatch } from 'react-redux'
 import { Formik,Form,Field,ErrorMessage } from 'formik'
 import InputBox from '../../components/InputBox'
-import SelectBox from '../../components/SelectBox'
 import RegisterModal from '../../components/RegisterModal'
-import EmployeeDetailModal from '../../components/UpdateEmployeeDetailModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Pagination from '../../components/Pagination'
-
+            
 function Users() {
     console.log("user rendring")
     const dispatch = useDispatch();

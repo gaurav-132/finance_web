@@ -14,11 +14,20 @@ import LoanRequests from './pages/loanrequests/LoanRequests.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import Users from './pages/users/Users.jsx'
 import Locations from './pages/locations/Locations.jsx'
+import { useStore } from 'react-redux'
+import { useEffect } from 'react'
+import { setupAxiosInterceptors } from './services/index.jsx'
 
 function App() {
     
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     
+    const store = useStore(); // Access Redux store
+
+    useEffect(() => {
+        setupAxiosInterceptors(store); 
+    }, [store]);
+
     return (
         <BrowserRouter>
             <ErrorBoundary>

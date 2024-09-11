@@ -1,29 +1,47 @@
-
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import CreateOrUpdateLocationModal from '../../components/CreateOrUpdateLocationModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllLocations } from '../../app/slices/locationSlice';
+import { createOrUpdateLocation, fetchAllLocations } from '../../app/slices/locationSlice';
 import Pagination from '../../components/Pagination';
 import Button from '../../components/Button';
+import { toast } from 'react-toastify';
+
 
 function Locations() {  
     const [addLocationModalStatus, setAddLocationModalStatus] = useState(false);
     const [locationObject, setLocationObject] = useState({id: 0, locationName: ''});
     const dispatch = useDispatch();
     const {locations, total, limit, page, status} = useSelector(state => state.locations);
-    const filterData = {
+
+    const filterData = useMemo(() => ({
         total,
         limit,
         page,
         allocatedLocationId:0,
         employeeName:'',
-    }
+    }), [total,limit,page]);
     
-
-    const handlePageChange = (newPage) => {
+    console.log("location render")
+    const handlePageChange = useCallback((newPage) => {
         filterData.page = newPage;
         dispatch(fetchAllLocations(filterData));
-    };
+    },[]);
+
+    const handleSubmit = async (values) => {
+        try {
+            const response = await dispatch(createOrUpdateLocation(values)).unwrap();
+            toast.success(response, {
+                position: "top-center",
+                autoClose: 3000,
+            });
+            dispatch(fetchAllLocations(filterData));
+        } catch (error){
+            toast.warning(error.message, {
+                position: "top-center",
+                autoClose: 3000,
+            });
+        }
+      };
 
     const changeModalStatus = (location) => {
         setLocationObject(location);
@@ -89,7 +107,7 @@ function Locations() {
                                                     type='submit'
                                                     disabled={false}
                                                     onClick={() => changeModalStatus(location)}
-                                                    className='bg-[#F44336] py-1 text-white focus:ring-0 focus:outline-none w-full font-semibold'
+                                                    className='bg-[#F44336] py-1 text-white focus:ring-0 focus:outline-none  font-semibold'
                                                 >
                                                     Edit
                                                 </Button>
@@ -107,7 +125,7 @@ function Locations() {
                 onChange={setAddLocationModalStatus}
                 modalWidth="40%"
                 height="250px"
-                // submitDetails={handleSubmitDetails}
+                submitDetails={handleSubmit}
             />
         </div>
     )
