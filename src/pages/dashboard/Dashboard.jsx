@@ -3,6 +3,52 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchDashboardData } from '../../app/slices/dashboardSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoneyBillTrendUp, faLandmark, faUser, faHourglassStart, faWallet, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import Button from '../../components/Button';
+import { getData } from '../../services/getData';
+
+const getCurrentDateTimeString = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+  
+    return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
+  };
+
+const downloadDailyReport = async () => {
+    try {
+        // Fetch the Blob data
+        const blob = await getData("/v1/generatepdf/daily-report", {
+            responseType: 'blob' // Ensure binary data response
+        });
+
+        if (blob) {
+            // Create a Blob URL for the PDF
+            const url = window.URL.createObjectURL(blob); // No need to wrap blob again
+            const filename = `todays_report_${getCurrentDateTimeString()}.pdf`;
+            
+            // Create a download link and trigger it
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${filename}`; // Set the filename
+            document.body.appendChild(a);
+            a.click();
+
+            // Clean up
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        } else {
+            console.error('No data returned for download');
+        }
+    } catch (error) {
+        console.error('Error downloading the report:', error);
+    }
+};
+
+
 
 const Dashboard = () => {
     const dispatch = useDispatch();
@@ -31,8 +77,15 @@ const Dashboard = () => {
 
     return (
         <div className="">
-            <div className='bg-[#373737] rounded-md px-2 py-4'>
-                <h2 className='text-white font-bold'>Dashboard</h2>
+             <div className='bg-[#373737] rounded-md px-2 py-3 flex justify-between items-center'>
+            <h2 className='text-white font-bold'>Dashboard</h2>
+            <Button
+                className='bg-blue-600 text-white focus:ring-0 focus:outline-none py-1 px-4 font-semibold'
+                onClick={() => {downloadDailyReport()} 
+                }
+            >
+                Download Report
+            </Button>
             </div>
             {status === 'pending' && 
                 <div className='border px-2 py-2 rounded text-sm font-bold text-white bg-yellow-400'>Loading...</div>

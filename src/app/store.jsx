@@ -6,8 +6,8 @@ import usersReducer from './slices/userSlice';
 import customersReducer from './slices/customerSlice';
 import locationReducer from './slices/locationSlice';
 import dashboardReducer from './slices/dashboardSlice';
+import dailyCollectionsReducer from './slices/dailyCollectionSlice'
 
-// Create the Redux store
 const store = configureStore({
     reducer: {
         auth: authReducer,
@@ -17,6 +17,7 @@ const store = configureStore({
         customers: customersReducer,
         locations: locationReducer,
         dashboard: dashboardReducer,
+        dailyCollections: dailyCollectionsReducer,
     },
 });
 

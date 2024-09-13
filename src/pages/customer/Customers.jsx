@@ -6,6 +6,7 @@ import Pagination from '../../components/Pagination';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import InputBox from '../../components/InputBox';
+import AddCustomerModal from '../../components/AddCustomerModal';
 
 const Customers = () => {
     const dispatch = useDispatch();
@@ -13,6 +14,12 @@ const Customers = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const{ status, total, page, limit, customers}= useSelector((state)=>state.customers);
     const [showFilter, setShowFilter] = useState(false);
+
+    const [openAddCustomerModal,setAddUserModal] = useState(false)
+
+    const changeAddUserModal = () => {
+        setAddUserModal(true);
+    }
     
     // const {customers} = useSelector((state) => state.customers);
     
@@ -50,8 +57,15 @@ const Customers = () => {
 
     return (
         <div className="h-full">
-            <div className='bg-[#373737] rounded-md px-2 py-4 justify-between items-center'>
-                <h2 className='text-white font-bold'>Customers</h2>
+            <div className='bg-[#373737] rounded-md px-2 py-3 flex justify-between items-center'>
+            <h2 className='text-white font-bold'>Customers</h2>
+            <Button
+                className='bg-blue-600 text-white focus:ring-0 focus:outline-none py-1 px-4 font-semibold'
+                onClick={() => {changeAddUserModal()} 
+                }
+            >
+                Add Customer
+            </Button>
             </div>
             <div className=''>
             <div className='relative' style={{ paddingBottom: showFilter ? '0px' : 60 }}>
@@ -156,6 +170,13 @@ const Customers = () => {
                         </div>)
                     }   
             </div>
+            <AddCustomerModal
+            isOpen={openAddCustomerModal}
+            onChange={setAddUserModal}
+            modalWidth="60%"
+            height="200px"
+            filterData={filterData}
+            />
         </div>
     )
 }

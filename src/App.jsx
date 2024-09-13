@@ -9,7 +9,6 @@ import AdminLayout from './pages/layouts/AdminLayout.jsx'
 import Employees from './pages/employees/Employees.jsx'
 import Customers from './pages/customer/Customers.jsx'
 import Loans from './pages/loans/Loans.jsx'
-import Todaysdata from './pages/todays/Todaysdata.jsx'
 import LoanRequests from './pages/loanrequests/LoanRequests.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import Users from './pages/users/Users.jsx'
@@ -17,6 +16,7 @@ import Locations from './pages/locations/Locations.jsx'
 import { useStore } from 'react-redux'
 import { useEffect } from 'react'
 import { setupAxiosInterceptors } from './services/index.jsx'
+import DailyCollections from './pages/dailyCollections/Dailycollections.jsx'
 
 function App() {
     
@@ -42,7 +42,7 @@ function App() {
                         <Route path="employees" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Employees /></ProtectedRoute>} />
                         <Route path="customers" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Customers /></ProtectedRoute>} />
                         <Route path="loans" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Loans /></ProtectedRoute>} />
-                        <Route path="todays" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Todaysdata /></ProtectedRoute>} />
+                        <Route path="dailycollections" element={<ProtectedRoute isAuthenticated={isAuthenticated}><DailyCollections /></ProtectedRoute>} />
                         <Route path="requests" element={<ProtectedRoute isAuthenticated={isAuthenticated}><LoanRequests /></ProtectedRoute>} />
                         <Route path="salary" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Customers /></ProtectedRoute>} />
                         <Route path="users" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Users/></ProtectedRoute>} />
