@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllCustomers } from '../../app/slices/customerSlice';
+import { fetchAllCustomers, fetchCustomerDetails } from '../../app/slices/customerSlice';
 import Button from '../../components/Button';
 import Pagination from '../../components/Pagination';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import InputBox from '../../components/InputBox';
 import AddCustomerModal from '../../components/AddCustomerModal';
+import CustomerDetailModal from '../../components/CustomerDetailModal';
 
 const Customers = () => {
     const dispatch = useDispatch();
@@ -16,12 +17,22 @@ const Customers = () => {
     const [showFilter, setShowFilter] = useState(false);
 
     const [openAddCustomerModal,setAddUserModal] = useState(false)
+    const [openCustomerDetailModal , setCustomerDetailModal] = useState(false)
+
+    const customerDetails = useSelector(state=>state.customers.customerDetails);
+
+
+    const changeCustomerDetailModal = (customerId)  => {
+        dispatch(fetchCustomerDetails(customerId));
+        setCustomerDetailModal(true);
+        
+    }
 
     const changeAddUserModal = () => {
         setAddUserModal(true);
     }
     
-    // const {customers} = useSelector((state) => state.customers);
+   
     
     const filterData = {
         total:0,
@@ -154,14 +165,12 @@ const Customers = () => {
                                             <td className="py-1 border text-sm px-5">{customer.aadhaarNumber}</td>
                                             <td className="py-1 border text-sm px-5">{customer.panNumber}</td>
                                             <td className="py-1 border text-sm px-5 text-right">
-                                                {/* <Button
-                                                    type='submit'
-                                                    disabled={false}
-                                                    // onClick={() => changeModalStatus(employee)}
-                                                    className='bg-[#F44336] py-1 text-white focus:ring-0 focus:outline-none w-full font-semibold'
-                                                >
-                                                    Edit
-                                                </Button> */}
+                                            <Button
+                                                className='bg-[#374151] focus:ring-0 focus:outline-none mr-4 py-1 text-white font-semibold'
+                                                onClick={() => changeCustomerDetailModal(customer.id)}
+                                            >
+                                                View
+                                            </Button>
                                             </td>
                                         </tr>
                                     ))}
@@ -176,6 +185,13 @@ const Customers = () => {
             modalWidth="60%"
             height="200px"
             filterData={filterData}
+            />
+            <CustomerDetailModal
+            isOpen={openCustomerDetailModal}
+            onChange={setCustomerDetailModal}
+            modalWidth="60%"
+            height="200px"
+            customer={customerDetails}
             />
         </div>
     )
