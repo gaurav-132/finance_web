@@ -7,10 +7,11 @@ import Pagination from '../../components/Pagination'
 import { useDispatch, useSelector } from 'react-redux'
 import InputBox from '../../components/InputBox'
 import SelectBox from '../../components/SelectBox'
-import { dispatchAction, fetchAllLoanRequests } from '../../app/slices/loansSlice'
+import { dispatchAction, fetchAllLoanRequests, fetchLoanDetails } from '../../app/slices/loansSlice'
 import LoanActionModal from '../../components/LoanActionModal'
 import { Bounce, toast } from 'react-toastify';
 import { fetchAllLocations } from '../../app/slices/locationSlice'
+import LoanDetailsModal from '../../components/LoanDetailsModal'
 
 
 function Loans() {
@@ -19,6 +20,7 @@ function Loans() {
     const [showFilter, setShowFilter] = useState(true);
     const { loanRequests, page, limit, total, status, dispatchActionRes } = useSelector((state) => state.loans);
     const [openLoanReqModal, setOpenLoanReqModal] = useState(false);
+    const [openLoanDetailModal, setOpenLoanDetailModal] = useState(false); 
     const {locations} = useSelector(state=>state.locations);
 
     const filterData = useMemo(() => ({
@@ -81,10 +83,17 @@ function Loans() {
         setOpenLoanReqModal(true)
     }
 
+    const changeDetailModalStatus =(loanId) => {
+       dispatch(fetchLoanDetails(loanId));
+        setOpenLoanDetailModal(true);
+    }
+
     const handleDispatchAction = (action) => {
         dispatch(dispatchAction(action))
         console.log(action);
     }
+
+    const loanDetails = useSelector(state=>state.loans.loanDetails);
 
 
     const options = locations.map((item) => ({
@@ -225,7 +234,7 @@ function Loans() {
                                             <Button
                                                 type='submit'
                                                 disabled={false}
-                                                onClick={() => showDetailModal(loan)}
+                                                onClick={() => changeDetailModalStatus(loan.id)}
                                                 className='bg-blue-500 py-1 text-white focus:ring-0 focus:outline-none w-full font-semibold'
                                             >
                                                 View
@@ -246,6 +255,13 @@ function Loans() {
             modalWidth="60%"
             height="420px"
             handleDispatchAction={handleDispatchAction}
+        />
+        <LoanDetailsModal
+         isOpen={openLoanDetailModal}
+         onChange={setOpenLoanDetailModal}
+         modalWidth="60%"
+         height="200px"
+         loan={loanDetails}
         />
 </div>
     )
