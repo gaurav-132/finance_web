@@ -142,8 +142,8 @@ const Dashboard = () => {
                             <table>
                                 {topLocations.map((location, index) => (
                                     <tr key={index}>
-                                        <td className="py-2 border-b border-blue-gray-50">{location.location}</td>
-                                        <td className="py-2 border-b border-blue-gray-50">{location.count}</td>
+                                        <td className="py-2 border-b border-blue-gray-50">{location.locationName}</td>
+                                        <td className="py-2 border-b border-blue-gray-50">{location.loanCount}</td>
                                     </tr>
                                 ))}
                             </table>

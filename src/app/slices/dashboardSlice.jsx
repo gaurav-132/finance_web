@@ -5,20 +5,20 @@ export const fetchDashboardData = createAsyncThunk(
     'dashboard/fetchDashboardData',
     async(thunkAPI)=>{
         try {
-            // const response = await getData("/v1/dashboard/get-data")
-            const mockData = {
-                totalCollectionToday: 50000, // Rs. 50,000 collected today
-                totalLoans: 120,             // 120 active loans
-                totalLoanAmount: 1000000,    // Rs. 10,00,000 total loan amount
-                totalPendingAmount: 200000,  // Rs. 2,00,000 pending amount
-                totalNewLoans: 15,           // 15 new loans today
-                topLocations: [
-                  { location: "New York", count: 30 },
-                  { location: "Los Angeles", count: 25 },
-                  { location: "Chicago", count: 20 },
-                ]
-              };
-            return mockData;
+            const response = await getData("/v1/dashboard/dashboard-data")
+            // const mockData = {
+            //     totalCollectionToday: 50000, // Rs. 50,000 collected today
+            //     totalLoans: 120,             // 120 active loans
+            //     totalLoanAmount: 1000000,    // Rs. 10,00,000 total loan amount
+            //     totalPendingAmount: 200000,  // Rs. 2,00,000 pending amount
+            //     totalNewLoans: 15,           // 15 new loans today
+            //     topLocations: [
+            //       { location: "New York", count: 30 },
+            //       { location: "Los Angeles", count: 25 },
+            //       { location: "Chicago", count: 20 },
+            //     ]
+            //   };
+            return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
@@ -33,7 +33,7 @@ const dashboardSlice = createSlice({
         totalLoanAmount:0,
         totalPendingAmount:0,
         totalNewLoans:0,
-        topLocation:[],
+        topLocations:[],
         status:"idle",
         error:null,
     },
