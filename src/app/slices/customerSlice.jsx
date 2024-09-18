@@ -35,25 +35,27 @@ export const fetchCustomerDetails = createAsyncThunk(
     async (customerId, thunkAPI) => {
         
         try {
-            // const response = await postData(`/v1/customers/get-customer/${customerId}`);
-            const response = {
-                data:{
-                id: 1,
-                firstName: "John",
-                lastName: "Doe",
-                mobileNumber: "9876543210",
-                aadhaarNumber: "1234-5678-9012",
-                panNumber: "ABCDE1234F",
-                fullAddress: "123 Main St, Springfield",
-                location: "New York",
-                dateOfBirth: "1990-01-01",
-                occupation: "Software Engineer",
-                profilePic: "https://randomuser.me/api/portraits/men/1.jpg",
-                loanDetails: [
-                    { loanId: 101, amount: 5000, status: "active", dueDate: "2024-12-01" },
-                    { loanId: 102, amount: 3000, status: "completed", dueDate: "2023-09-15" }
-                ],
-            }}
+            const response = await postData(`/v1/customers/get-customer/${customerId}`);
+            // const response = {
+            //     data:{
+            //     id: 1,
+            //     firstName: "John",
+            //     lastName: "Doe",
+            //     mobileNumber: "9876543210",
+            //     aadhaarNumber: "1234-5678-9012",
+            //     panNumber: "ABCDE1234F",
+            //     fullAddress: "123 Main St, Springfield",
+            //     location: "New York",
+            //     dateOfBirth: "1990-01-01",
+            //     occupation: "Software Engineer",
+            //     profilePic: "https://randomuser.me/api/portraits/men/1.jpg",
+            //     loanDetails: [
+            //         { loanId: 101, amount: 5000, status: "active", dueDate: "2024-12-01" },
+            //         { loanId: 102, amount: 3000, status: "completed", dueDate: "2023-09-15" }
+            //     ],
+            // }}
+            console.log(response);
+            
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);

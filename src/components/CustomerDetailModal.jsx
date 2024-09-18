@@ -53,8 +53,8 @@ const CustomerDetailsModal = ({ customer, isOpen, onChange }) => {
                                 <p className="text-[16px] mb-1">Pan No: 
                                     <span className='text-gray-500 text-[15px]'>{customer?.panNumber || "N/A"}</span>
                                 </p>
-                                <p className="text-[16px] mb-1">Full Address: 
-                                    <span className='text-gray-500 text-[15px]'>{customer?.fullAddress || "N/A"}</span>
+                                <p className="text-[16px] mb-1">Permanent Address: 
+                                    <span className='text-gray-500 text-[15px]'>{customer?.permanentAddress || "N/A"}</span>
                                 </p>
                                 <p className="text-[16px] mb-1">Occupation: 
                                     <span className='text-gray-500 text-[15px]'>{customer?.occupation || "N/A"}</span>
@@ -62,7 +62,7 @@ const CustomerDetailsModal = ({ customer, isOpen, onChange }) => {
                                 <p className="text-[16px] mb-1 flex flex-col">Loan Details: 
                                     {customer?.loanDetails.map((item)=>{
                                         return(
-                                            <span className='text-gray-500 text-[15px]'>{item.loanId}  ||  {item.amount }  ||  {item.status }</span>
+                                            <span className='text-gray-500 text-[15px]'>{item.id}  ||  {item.loanAmount }  ||  {item.status } || {item.loanAmount-item.amountPaid}</span>
                                         )
                                     })}
                                 </p>
