@@ -40,24 +40,24 @@ export const fetchLoanDetails = createAsyncThunk(
     async (loanId,thunkAPI)=>{
        
         try {
-            // const response = await getData('v1/loans/get-loan/${loanId}')
-            const response = {
-                data:{
-                loanId: 201,
-                name: "Raghav",
-                totalAmount: 10000,
-                collectedAmount: 6000,
-                pendingAmount: 4000,
-                profit: 500,  // Profit from interest or fees
-                issueDate: "2023-06-01",
-                dueDate: "2024-06-01",
-                transactionLogs: [
-                    { transactionId: 301, date: "2023-07-01", amount: 2000, status: "collected" },
-                    { transactionId: 302, date: "2023-08-01", amount: 2000, status: "collected" },
-                    { transactionId: 303, date: "2023-09-01", amount: 2000, status: "collected" },
-                    { transactionId: 304, date: "2023-10-01", amount: 2000, status: "pending" }
-                ]
-            }};
+            const response = await postData(`v1/customers/get-loan/${loanId}`)
+            // const response = {
+            //     data:{
+            //     loanId: 201,
+            //     name: "Raghav",
+            //     totalAmount: 10000,
+            //     collectedAmount: 6000,
+            //     pendingAmount: 4000,
+            //     profit: 500,  // Profit from interest or fees
+            //     issueDate: "2023-06-01",
+            //     dueDate: "2024-06-01",
+            //     transactionLogs: [
+            //         { transactionId: 301, date: "2023-07-01", amount: 2000, status: "collected" },
+            //         { transactionId: 302, date: "2023-08-01", amount: 2000, status: "collected" },
+            //         { transactionId: 303, date: "2023-09-01", amount: 2000, status: "collected" },
+            //         { transactionId: 304, date: "2023-10-01", amount: 2000, status: "pending" }
+            //     ]
+            // }};
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);

@@ -25,7 +25,7 @@ function LoanDetailsModal({loan,isOpen,onChange}) {
                     </div>
                     <div className="py-6 text-center">
                         <div className="text-xl">
-                            {loan?.name || ""}
+                            {loan?.firstName  || ""}
                         </div>
                     </div>
                 </div>
@@ -33,25 +33,31 @@ function LoanDetailsModal({loan,isOpen,onChange}) {
                     <div className="text-xl mb-1 font-bold">Details:</div>
                     <div className="flex flex-col justify-center">
                         <p className="text-[16px] mb-1">Name:
-                            <span className="text-gray-500 text-[15px]">{loan?.name || "N/A"}</span>
+                            <span className="text-gray-500 text-[15px]">{loan?.firstName || "N/A"}</span>
+                        </p>
+                        <p className="text-[16px] mb-1">Mobile No:
+                            <span className="text-gray-500 text-[15px]">{loan?.mobileNumber || "N/A"}</span>
+                        </p>
+                        <p className="text-[16px] mb-1">Loan Amount:
+                            <span className="text-gray-500 text-[15px]">{loan?.loanAmount || "N/A"}</span>
                         </p>
                         <p className="text-[16px] mb-1">Total Amount:
                             <span className="text-gray-500 text-[15px]">{loan?.totalAmount || "N/A"}</span>
                         </p>
                         <p className="text-[16px] mb-1">Collected Amount:
-                            <span className="text-gray-500 text-[15px]">{loan?.collectedAmount || "N/A"}</span>
+                            <span className="text-gray-500 text-[15px]">{loan?.amountPaid || "N/A"}</span>
                         </p>
                         <p className="text-[16px] mb-1">Pending Amount:
-                            <span className="text-gray-500 text-[15px]">{loan?.pendingAmount || "N/A"}</span>
+                            <span className="text-gray-500 text-[15px]">{loan?.totalAmount-loan?.amountPaid || "N/A"}</span>
                         </p>
                         <p className="text-[16px] mb-1">Profit:
-                            <span className="text-gray-500 text-[15px]">{loan?.profit || "N/A"}</span>
+                            <span className="text-gray-500 text-[15px]">{loan?.totalAmount-loan?.loanAmount || "N/A"}</span>
                         </p>
                         <p className="text-[16px] mb-1">Issue date:
-                            <span className="text-gray-500 text-[15px]">{loan?.issueDate || "N/A"}</span>
+                            <span className="text-gray-500 text-[15px]">{loan?.startDate || "N/A"}</span>
                         </p>
                         <p className="text-[16px] mb-1">Due Date:
-                            <span className="text-gray-500 text-[15px]">{loan?.dueDate || "N/A"}</span>
+                            <span className="text-gray-500 text-[15px]">{loan?.endDate || "N/A"}</span>
                         </p>
                         <p className="text-[16px] mb-1">Logs: </p>
 
