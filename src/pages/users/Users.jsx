@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect,useMemo,useState } from 'react'
 import Button from '../../components/Button'
-import { fetchAllUsers } from '../../app/slices/userSlice'
+import { deleteUser, fetchAllUsers } from '../../app/slices/userSlice'
 import { useSelector,useDispatch } from 'react-redux'
 import { Formik,Form,Field,ErrorMessage } from 'formik'
 import InputBox from '../../components/InputBox'
@@ -64,6 +64,13 @@ function Users() {
         setFilterData(initialFilterData);
         resetForm();
       }, [initialFilterData]);
+
+    
+    const handleDeleteUser = (userId) => {
+        dispatch(deleteUser(userId)).then(() => {
+          dispatch(fetchAllUsers(filterData));
+        });
+    };
 
     return (
     <div className="h-full">
@@ -160,7 +167,11 @@ function Users() {
                                     <td className="py-2 border text-sm px-5">{user.mobile}</td>
                                     <td className="py-2 border text-sm px-5">{user.isActive}</td>                                 
                                     <td className="py-2 border text-sm px-5 text-right">
-                                        
+                                    <Button
+                                     className='text-sm bg-red-700 py-1'
+                                     onClick={() => handleDeleteUser(user.id)}>
+                                     Delete
+                                    </Button>
                                     </td>
                                 </tr>
                             ))}

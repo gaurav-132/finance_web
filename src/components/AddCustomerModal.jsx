@@ -14,18 +14,39 @@ const AddCustomerModal = ({ isOpen, modalWidth, onChange, height }) => {
   
   const dispatch = useDispatch();
 
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    // console.log(values);
+    
+    const formData = new FormData();
+    console.log(formData);
+        Object.keys(values).forEach((key) => {
+            // Log to check what is being appended
+            console.log(`Appending ${key}:`, values[key]);
+            
+            // Append only if the value exists
+            if (values[key]) {
+              formData.append(key, values[key]);
+            }
+          });
+  
+
+          for (let [key, value] of formData.entries()) {
+            console.log(`${key}:`, value);
+          }
     try {
-      const response = await dispatch(createCustomer(values)).unwrap();
-      setSubmitting(false);
+    
+      await dispatch(createCustomer(formData)).unwrap();
+      toast.success('Customer added successfully');
+      resetForm(); // Reset form values
       onChange(false); // Close modal
-      toast.success('Customer added successfully', {});
     } catch (error) {
-      toast.error(error.message || 'An error occurred during registration', {});
-      setSubmitting(false);
+      console.error('Error creating customer:', error); // More specific error logging
+      toast.error(error.message || 'An error occurred during registration');
+    } finally {
+      setSubmitting(false); // Ensure submitting state is reset
     }
   };
-
+  
   
 
   return (
@@ -76,11 +97,11 @@ const AddCustomerModal = ({ isOpen, modalWidth, onChange, height }) => {
                 <Field id="mobileNumber" name="mobileNumber" type="text" as={InputBox} />
                 <ErrorMessage name="mobileNumber" component="div" className='text-red-500 text-sm' />
               </div>
-              <div className='flex-1'>
-                <label htmlFor="aadhaarNumber" className='block mb-1'>Aadhaar Number</label>
-                <Field id="aadhaarNumber" name="aadhaarNumber" type="text" as={InputBox} />
-                <ErrorMessage name="aadhaarNumber" component="div" className='text-red-500 text-sm' />
-              </div>
+            <div className='flex-1'>
+            <label htmlFor="aadhaarNumber" className='block mb-1'>Aadhaar Number</label>
+            <Field id="aadhaarNumber" name="aadhaarNumber" type="text" as={InputBox} />
+            <ErrorMessage name="aadhaarNumber" component="div" className='text-red-500 text-sm' />
+            </div>
             </div>
 
             <div className='flex mb-4'>
@@ -96,7 +117,6 @@ const AddCustomerModal = ({ isOpen, modalWidth, onChange, height }) => {
               </div>
             </div>
 
-            {/* Additional fields for permanent/current address, work location, etc. */}
             <div className='mb-4'>
               <label htmlFor="permanentAddress" className='block mb-1'>Permanent Address</label>
               <Field id="permanentAddress" name="permanentAddress" type="text" as={InputBox} />
@@ -116,11 +136,11 @@ const AddCustomerModal = ({ isOpen, modalWidth, onChange, height }) => {
             </div>
 
 
-            {/* <div className='mb-4'>
+            <div className='mb-4'>
               <label htmlFor="addedBy" className='block mb-1'>Added By</label>
-              <Field id="addedBy" name="addedBy" type="text" as={InputBox} />
+              <Field id="addedBy" name="addedBy" type="number" as={InputBox} />
               <ErrorMessage name="addedBy" component="div" className='text-red-500 text-sm' />
-            </div> */}
+            </div>
             <Field name="chequePhoto">
   {({ field, form }) => (
     <FileUploadBox

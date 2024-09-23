@@ -21,7 +21,7 @@ const getCurrentDateTimeString = () => {
 const downloadDailyReport = async () => {
     try {
         // Fetch the Blob data
-        const blob = await getData("/v1/generatepdf/daily-report", {
+        const blob = await getData("/v1/dashboard/daily-report", {
             responseType: 'blob' // Ensure binary data response
         });
 

@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getData } from '../../services/getData';
 import { postData } from '../../services/postData';
+import { deleteData } from '../../services/deleteData';
+import {toast} from 'react-toastify';
 
 export const fetchAllUsers = createAsyncThunk(
     'users/fetchAllUsers',
@@ -14,6 +16,19 @@ export const fetchAllUsers = createAsyncThunk(
     }
 );
 
+export const deleteUser = createAsyncThunk(
+    'users/deleteUser',
+    async (userId, thunkAPI) => {
+        try {
+            const response = await deleteData(`/v1/users/delete-user/${userId}`);
+            toast.success('User deleted successfully!');
+            return { userId, message: response.message };
+        } catch (error) {
+            toast.error("failed to delete user");
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 export const updateUser = createAsyncThunk(
     'users/updateUser',
     async (formData, thunkAPI) => {
@@ -64,6 +79,18 @@ const usersSlice = createSlice({
             state.updateResponse = action.payload.message;
         })
         .addCase(updateUser.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        })
+        .addCase(deleteUser.pending, (state) => {
+            state.status = 'loading';
+        })
+        .addCase(deleteUser.fulfilled, (state, action) => {
+            state.status = 'succeeded';
+            state.users = state.users.filter(user => user.id !== action.payload.userId);
+            state.updateResponse = action.payload.message;
+        })
+        .addCase(deleteUser.rejected, (state, action) => {
             state.status = 'failed';
             state.error = action.error.message;
         });

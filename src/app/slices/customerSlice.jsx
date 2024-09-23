@@ -19,9 +19,10 @@ export const fetchAllCustomers = createAsyncThunk(
 
 export const createCustomer = createAsyncThunk(
     'customers/createCustomer',
-    async (newCustomerData, thunkAPI) => {
+    async (formData, thunkAPI) => {
+    
         try {
-            const response = await postData('/v1/customers/create-customer', newCustomerData);
+            const response = await postData('/v1/customers/create-customer', formData,thunkAPI);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
