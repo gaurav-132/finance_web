@@ -17,6 +17,7 @@ import { useStore } from 'react-redux'
 import { useEffect } from 'react'
 import { setupAxiosInterceptors } from './services/index.jsx'
 import DailyCollections from './pages/dailyCollections/Dailycollections.jsx'
+import Transactions from './pages/transactions/Transactions.jsx'
 
 function App() {
     
@@ -43,6 +44,7 @@ function App() {
                         <Route path="customers" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Customers /></ProtectedRoute>} />
                         <Route path="loans" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Loans /></ProtectedRoute>} />
                         <Route path="dailycollections" element={<ProtectedRoute isAuthenticated={isAuthenticated}><DailyCollections /></ProtectedRoute>} />
+                        <Route path="transactions" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Transactions /></ProtectedRoute>} />
                         <Route path="requests" element={<ProtectedRoute isAuthenticated={isAuthenticated}><LoanRequests /></ProtectedRoute>} />
                         <Route path="salary" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Customers /></ProtectedRoute>} />
                         <Route path="users" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Users/></ProtectedRoute>} />

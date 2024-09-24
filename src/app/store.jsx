@@ -6,7 +6,8 @@ import usersReducer from './slices/userSlice';
 import customersReducer from './slices/customerSlice';
 import locationReducer from './slices/locationSlice';
 import dashboardReducer from './slices/dashboardSlice';
-import dailyCollectionsReducer from './slices/dailyCollectionSlice'
+import dailyCollectionsReducer from './slices/dailyCollectionSlice';
+import transactionsReducer from './slices/transactionSlice';
 
 const store = configureStore({
     reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
         locations: locationReducer,
         dashboard: dashboardReducer,
         dailyCollections: dailyCollectionsReducer,
+        transactions:transactionsReducer
     },
 });
 

@@ -35,8 +35,10 @@ const Sidebar = () => {
         {name: "Customers" , icon:'faDashboard', path: '/admin/customers'},
         {name: "Loans" , icon:'faNoteSticky' , path:`/admin/loans`},
         {name: "Daily Collection" , icon:'faCalendarWeek' , path:`/admin/dailycollections`},
+        {name:"Transactions",icon:'faCalendarWeek' , path:`/admin/transactions`},
         {name: "Salary" , icon:'faCloud' , path:`/admin/salary`},
         {name:"Locations", icon:'faLandmark',path:`/admin/locations`},
+        
     ];
 
     return (

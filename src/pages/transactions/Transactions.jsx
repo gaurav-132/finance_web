@@ -6,12 +6,13 @@ import InputBox from '../../components/InputBox';
 import SelectBox from '../../components/SelectBox';
 import Button from '../../components/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDailyCollections } from '../../app/slices/dailyCollectionSlice'; // Adjust according to your slice
+import { fetchTransactions } from '../../app/slices/transactionSlice';
 import { fetchAllLocations } from '../../app/slices/locationSlice';
 
-function DailyCollections() {
+function Transactions() {
     const dispatch = useDispatch();
-    const { collections, total, limit, page, status, error } = useSelector((state) => state.dailyCollections);
+
+    const { transactions, total, limit, page, status, error } = useSelector((state) => state.transactions);
     const { locations } = useSelector(state => state.locations);
 
     const [showFilter, setShowFilter] = useState(false);
@@ -25,17 +26,17 @@ function DailyCollections() {
     };
 
     useEffect(() => {
-        dispatch(fetchDailyCollections(filterData));
+        dispatch(fetchTransactions(filterData));
         dispatch(fetchAllLocations());
     }, [dispatch]);
 
     const handlePageChange = (newPage) => {
         filterData.page = newPage;
-        dispatch(fetchDailyCollections(filterData));
+        dispatch(fetchTransactions(filterData));
     };
 
     const handleSubmit = (values, { setSubmitting }) => {
-        dispatch(fetchDailyCollections(values));
+        dispatch(fetchTransactions(values));
         setSubmitting(false);
     };
 
@@ -51,16 +52,16 @@ function DailyCollections() {
             page: 1,
             allocatedLocationId: 0,
             employeeName: '',
-            date: '', // Clear date filter
+            date: '', 
         };
-        dispatch(fetchDailyCollections(filterData));
+        dispatch(fetchTransactions(filterData));
         resetForm();
     };
 
     return (
         <div className="">
             <div className='bg-[#373737] rounded-md px-2 py-3'>
-                <h2 className='text-white font-bold'>Daily Collections</h2>
+                <h2 className='text-white font-bold'>Transactions</h2>
             </div>
             <div>
                 <div className='relative' style={{ paddingBottom: showFilter ? '0px' : 60 }}>
@@ -97,7 +98,7 @@ function DailyCollections() {
                                                 name="date"
                                                 label="Select Date"
                                                 type="date"
-                                                as={InputBox} // Date field
+                                                as={InputBox} 
                                             />
                                         </div>
                                     </div>
@@ -132,10 +133,10 @@ function DailyCollections() {
                     <div className='border px-2 py-2 rounded text-sm font-bold text-white bg-yellow-400'>Loading...</div>
                 }
                 {
-                    (status === 'succeeded' && (!collections || collections.length === 0)) &&
+                    (status === 'succeeded' && (!transactions || transactions.length === 0)) &&
                     <div className='border my-2 px-2 py-2 rounded text-sm font-bold text-white bg-red-600'>No Data Found</div>
                 }
-                {status === 'succeeded' && collections && collections.length > 0 && (
+                {status === 'succeeded' && transactions && transactions.length > 0 && (
                     <div>
                         <Pagination
                             page={page}
@@ -149,24 +150,20 @@ function DailyCollections() {
                                     <th className="py-2 border text-sm px-5 text-left">Id</th>
                                     <th className="py-2 border text-sm px-5 text-left">Name</th>
                                     <th className="py-2 border text-sm px-5 text-left">Location</th>
-                                    <th className="py-2 border text-sm px-5 text-right">Amt Collected</th>
-                                    <th className="py-2 border text-sm px-5 text-right">New Loans</th>
-                                    <th className="py-2 border text-sm px-5 text-right">New Loans Amt</th>
-                                    <th className="py-2 border text-sm px-5 text-right">Expenses</th>
-                                    <th className="py-2 border text-sm px-5 text-right">Balance</th>
+                                    <th className="py-2 border text-sm px-5 text-right">Amount</th>
+                                    <th className="py-2 border text-sm px-5 text-right">Date</th>
+                                    <th className="py-2 border text-sm px-5 text-right">Mode</th>
                                 </tr>
                             </thead>
                             <tbody className='overflow-y-scroll'>
-                                {collections.map((collection, index) => (
+                                {transactions.map((transaction, index) => (
                                     <tr className='border-b' key={index}>
                                         <td className="py-1 border text-sm px-5">{((page - 1) * limit) + (index + 1)}</td>
-                                        <td className="py-1 border text-sm px-5">{collection.name}</td>
-                                        <td className="py-1 border text-sm px-5">{collection.location}</td>
-                                        <td className="py-1 border text-sm px-5 text-right">{collection.amountCollected}</td>
-                                        <td className="py-1 border text-sm px-5 text-right">{collection.newLoans}</td>
-                                        <td className="py-1 border text-sm px-5 text-right">{collection.newLoansAmount}</td>
-                                        <td className="py-1 border text-sm px-5 text-right">{collection.expenses}</td>
-                                        <td className="py-1 border text-sm px-5 text-right">{collection.balance}</td>
+                                        <td className="py-1 border text-sm px-5">{transaction.name}</td>
+                                        <td className="py-1 border text-sm px-5">{transaction.location}</td>
+                                        <td className="py-1 border text-sm px-5 text-right">{transaction.amount}</td>
+                                        <td className="py-1 border text-sm px-5 text-right">{transaction.date}</td>
+                                        <td className="py-1 border text-sm px-5 text-right">{transaction.mode}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -184,4 +181,4 @@ function DailyCollections() {
     );
 }
 
-export default DailyCollections;
+export default Transactions;
