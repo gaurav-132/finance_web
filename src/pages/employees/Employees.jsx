@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllEmployees, updateEmployee } from '../../app/slices/employeeSlice';
+import { fetchAllEmployees, fetchEmployeeDetails, updateEmployee } from '../../app/slices/employeeSlice';
 import { fetchAllLocations } from '../../app/slices/locationSlice';
 import Button from '../../components/Button';
 import SelectBox from '../../components/SelectBox';
@@ -19,8 +19,7 @@ const Employees = () => {
 
     const { employees, total, limit, page, status, updateResponse } = useSelector((state) => state.employees);
     const { locations } = useSelector(state => state.locations);
-
-    const [employee, setEmployee] = useState({});
+    const employeeDetails = useSelector(state => state.employees.employeeDetails);
     const closeModal = useCallback(() => setIsModalOpen(false), []);
 
     const initialFilterData = useMemo(() => ({
@@ -68,7 +67,7 @@ const Employees = () => {
     }, [updateResponse]);
 
     const showEmpDetails = useCallback((employee) => {
-        setEmployee(employee);
+        dispatch(fetchEmployeeDetails(employee.id));
         setIsEmployeeDetailsModalOpen(true);
     }, []);
 
@@ -253,7 +252,7 @@ const Employees = () => {
                 onChange={handleEmployeeDetailModal}
                 modalWidth="60%"
                 height="380px"
-                employee={employee}
+                employee={employeeDetails}
             />
             
         </div>

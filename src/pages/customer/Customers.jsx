@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllCustomers, fetchCustomerDetails } from '../../app/slices/customerSlice';
 import Button from '../../components/Button';
@@ -14,7 +14,7 @@ const Customers = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const{ status, total, page, limit, customers}= useSelector((state)=>state.customers);
-    const [showFilter, setShowFilter] = useState(false);
+    const [showFilter, setShowFilter] = useState(true);
 
     const [openAddCustomerModal,setAddUserModal] = useState(false)
     const [openCustomerDetailModal , setCustomerDetailModal] = useState(false)
@@ -34,37 +34,47 @@ const Customers = () => {
     
    
     
-    const filterData = {
-        total:0,
-        limit:10,
-        page:1
-    }
+    const initialFilterData = useMemo(() => ({
+        total,
+        limit,
+        page,
+        allocatedLocationId: 0,
+        customerName: '',
+    }), [total, limit, page]);
+
+    const [filterData, setFilterData] = useState(initialFilterData);
+
+
 
     useEffect(() => {
         dispatch(fetchAllCustomers(filterData))
-    }, [dispatch]);
+    }, [dispatch,filterData]);
 
     const handlePageChange = (newPage) => {
         filterData.page = newPage;
         dispatch(fetchAllCustomers(filterData));
     };
 
-    const handleSubmit = (values, {setSubmitting}) => {
-        dispatch(fetchAllCustomers(values));
-        setSubmitting(false); 
-    }
+    const handleSubmit = useCallback((values, { setSubmitting }) => {
+        setFilterData(prevData => ({
+            ...prevData,
+            customerName: values.name, // update filter data
+            page: 1 // reset to first page on new search
+        }));
+        setSubmitting(false);
+    }, []);
 
-    const clearData = (resetForm) => {
-        const filterData = {
-            total:0,
-            limit:10,
-            page:1,
-            allocatedLocationId:0,
-            employeeName:'',
-        };
-        dispatch(fetchAllCustomers(filterData));
-        resetForm();
-    }    
+   const clearData = useCallback((resetForm) => {
+    const newfilterData = {
+        total: 0,
+        limit: 10,
+        page: 1,
+        allocatedLocationId: 0,
+        customerName: '',
+    };
+    setFilterData(newfilterData);
+    resetForm(); 
+}, []);
 
     return (
         <div className="h-full">

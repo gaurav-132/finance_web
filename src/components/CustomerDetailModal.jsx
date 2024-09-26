@@ -62,7 +62,7 @@ const CustomerDetailsModal = ({ customer, isOpen, onChange }) => {
                                 <p className="text-[16px] mb-1 flex flex-col">Loan Details: 
                                     {customer?.loanDetails.map((item)=>{
                                         return(
-                                            <span className='text-gray-500 text-[15px]'>{item.id}  ||  {item.loanAmount }  ||  {item.status } || {item.loanAmount-item.amountPaid}</span>
+                                            <span className='text-gray-500 text-[15px]'> Id: {item.id}  || Amount: {item.loanAmount }  || LoanStatus: {item.status } || AmountPending: {item.loanAmount-item.amountPaid}</span>
                                         )
                                     })}
                                 </p>

@@ -15,6 +15,21 @@ export const fetchAllEmployees = createAsyncThunk(
     }
 );
 
+export const fetchEmployeeDetails = createAsyncThunk(
+    'employees/fetchEmployeeDetails',
+    async (employeeId, thunkAPI) => {
+        console.log("clickeedd");
+        
+        try {
+            const response = await getData(`/v1/employees/get-details/${employeeId}`);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+
+
 export const updateEmployee = createAsyncThunk(
     'employees/updateEmployee',
     async (formData,thunkAPI) => {
@@ -34,9 +49,11 @@ const employeesSlice = createSlice({
     name: 'employees',
     initialState: {
         employees:[],
+        employeeDetails: null,
         status: 'idle',
         error: null,
         updateResponse: null,
+        detailsStatus: 'idle',
         total:0,
         page:1,
         limit:10,
@@ -57,6 +74,17 @@ const employeesSlice = createSlice({
         .addCase(fetchAllEmployees.rejected, (state, action) => {
             state.status = 'failed';
             state.error = action.error.message;
+        })
+        .addCase(fetchEmployeeDetails.pending, (state) => {
+            state.detailsStatus = 'loading';
+        })
+        .addCase(fetchEmployeeDetails.fulfilled, (state, action) => {
+            state.detailsStatus = 'succeeded';
+            state.employeeDetails = action.payload;
+        })
+        .addCase(fetchEmployeeDetails.rejected, (state, action) => {
+            state.detailsStatus = 'failed';
+            state.detailsError = action.payload || action.error.message;
         })
         .addCase(updateEmployee.pending, (state) => {
             state.status = 'loading';
